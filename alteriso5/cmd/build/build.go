@@ -31,6 +31,6 @@ func build() error {
 	}
 
 	profile := config.DummyProfile()
-	target := config.NewTarget([]string{"x86_64"}, outDir)
+	target := config.NewTarget("x86_64", outDir)
 	return work.Build(profile, target)
 }

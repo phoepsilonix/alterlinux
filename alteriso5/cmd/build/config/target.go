@@ -1,10 +1,10 @@
 package config
 
 type Target struct {
-	Arch []string
+	Arch string
 	Out  string
 }
 
-func NewTarget(arch []string, out string) Target {
+func NewTarget(arch string, out string) Target {
 	return Target{arch, out}
 }

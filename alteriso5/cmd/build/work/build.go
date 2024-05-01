@@ -7,13 +7,15 @@ func (work Work) Build(p config.Profile, t config.Target) error {
 	work.profile = &p
 	work.target = &t
 
-	var tasks []BuildTask = []BuildTask{
-		work.MakeBaseDirs,
-		work.MakeChroot,
+	tasks := []*BuildTask{
+		makeBaseDirs,
+		makeChroot,
 	}
 
 	for _, t := range tasks {
-		err := t()
+		//err := (*t).task(&work)
+
+		err := work.RunOnce(t)
 		if err != nil {
 			return err
 		}
