@@ -2,7 +2,6 @@ package build
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"path"
 
@@ -34,15 +33,4 @@ func build() error {
 	profile := config.DummyProfile()
 	target := config.NewTarget([]string{"x86_64"}, outDir)
 	return work.Build(profile, target)
-}
-
-func Main() {
-	if err := check(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
-
-	if err := build(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	}
 }
