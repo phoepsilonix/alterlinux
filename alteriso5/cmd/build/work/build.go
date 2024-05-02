@@ -9,7 +9,8 @@ func (work Work) Build(p config.Profile, t config.Target) error {
 
 	tasks := []*BuildTask{
 		makeBaseDirs,
-		makeChroot,
+		//makeChroot,
+		makeBootModes,
 	}
 
 	for _, t := range tasks {

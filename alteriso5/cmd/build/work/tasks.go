@@ -1,10 +1,12 @@
 package work
 
 import (
+	"log/slog"
 	"path"
 
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/chroot"
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
+	cp "github.com/otiai10/copy"
 )
 
 var makeBaseDirs *BuildTask = NewBuildTask("makeBaseDirs",
@@ -29,5 +31,23 @@ var makeChroot *BuildTask = NewBuildTask("makeChroot", func(work *Work) error {
 		return err
 
 	}
+	return nil
+})
+
+var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w *Work) error {
+	slog.Debug("Setting up SYSLINUX for BIOS booting from a disk...")
+
+	isoSyslinuxDir := path.Join(w.Base, "iso", "boot", "syslinux")
+
+	if err := utils.MkdirsAll(isoSyslinuxDir); err != nil {
+		return err
+	}
+
+	profileSysLinuxDir := path.Join(w.profile.Base, "syslinux")
+
+	if err := cp.Copy(profileSysLinuxDir, isoSyslinuxDir); err != nil {
+		return err
+	}
+
 	return nil
 })

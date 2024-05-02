@@ -30,7 +30,13 @@ func build() error {
 		return err
 	}
 
-	profile := config.DummyProfile()
+	// Dummy profile
+	profile := config.Profile{
+		Base: path.Join(current, "profile"),
+		InstallDir: "alter",
+	}
+
+	// TODO: Add more targets
 	target := config.NewTarget("x86_64", outDir)
 	return work.Build(profile, target)
 }

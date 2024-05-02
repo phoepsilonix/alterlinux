@@ -1,6 +1,7 @@
 package work
 
 import (
+	"os"
 	"path"
 
 	"github.com/Hayao0819/nahi/osutils"
@@ -12,5 +13,12 @@ func (w *Work) RunOnce(task *BuildTask) error {
 		return nil
 	}
 
-	return task.Run(w)
+	if err := task.Run(w); err != nil {
+		return err
+	} else {
+		// Dont care about error
+		os.Create(lp)
+
+	}
+	return nil
 }
