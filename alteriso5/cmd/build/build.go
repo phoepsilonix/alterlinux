@@ -1,20 +1,12 @@
 package build
 
 import (
-	"errors"
 	"os"
 	"path"
 
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/config"
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work"
 )
-
-func check() error {
-	if os.Getuid() != 0 {
-		return errors.New("this program must be run as root")
-	}
-	return nil
-}
 
 func build() error {
 	current, err := os.Getwd()
@@ -32,7 +24,7 @@ func build() error {
 
 	// Dummy profile
 	profile := config.Profile{
-		Base: path.Join(current, "profile"),
+		Base:       path.Join(current, "profile"),
 		InstallDir: "alter",
 	}
 

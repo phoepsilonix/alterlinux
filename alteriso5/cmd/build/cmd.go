@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/FascodeNet/alterlinux/alteriso5/cmd/check"
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	"github.com/spf13/cobra"
 )
@@ -19,13 +20,12 @@ func Cmd() *cobra.Command {
 				os.Exit(1)
 			}, os.Interrupt)
 
-			if err := check(); err != nil {
-				cmd.PrintErrln(err)
-				os.Exit(1)
+			if err := utils.CallCmd(cmd, *check.Cmd()); err != nil {
+				return err
 			}
 
 			if err := build(); err != nil {
-				cmd.PrintErrln(err)
+				return err
 			}
 
 			return nil
