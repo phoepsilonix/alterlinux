@@ -4,7 +4,9 @@ import (
 	"log/slog"
 	"path"
 
+	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/airootfs"
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/chroot"
+	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/xorriso"
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	cp "github.com/otiai10/copy"
 )
@@ -50,4 +52,31 @@ var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w *Work) error
 	}
 
 	return nil
+})
+
+var makeAirootfs *BuildTask = NewBuildTask("makeAirootfs", func(w *Work) error {
+
+	slog.Debug("Copying profile to airootfs...")
+	airootfsDir := path.Join(w.Base, w.target.Arch, "airootfs")
+	isoDir := path.Join(w.Base, "iso")
+
+	sqfs := airootfs.SquashFS{
+		Base: airootfsDir,
+		Out:  path.Join(isoDir, w.profile.InstallDir, w.target.Arch, "airootfs.sfs"),
+	}
+
+	return sqfs.Build()
+})
+
+var makeBoot *BuildTask = NewBuildTask("makeBoot", func(w *Work) error {
+	// TODO: ISO以外もサポートする
+
+	opt := xorriso.Options{
+		SysLinux: true,
+	}
+
+	isodir := path.Join(w.Base, "iso")
+
+	return xorriso.Build(isodir, w.target.Out, &opt)
+
 })

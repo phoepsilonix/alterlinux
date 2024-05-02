@@ -17,6 +17,7 @@ func (w *Work) RunOnce(task *BuildTask) error {
 		return err
 	} else {
 		// Dont care about error
+		os.MkdirAll(path.Dir(lp), 0755)
 		os.Create(lp)
 
 	}
