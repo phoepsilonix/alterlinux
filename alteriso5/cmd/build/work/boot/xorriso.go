@@ -1,6 +1,7 @@
 package boot
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path"
@@ -43,11 +44,12 @@ func (o *xorriso) addArg(arg *xorrisoArg) {
 	}
 }
 
-func (o *xorriso) defaultArgs() *xorrisoArg {
+func (o *xorriso) preArgs() *xorrisoArg {
 
 	out := path.Join(o.out, "alterlinux.iso")
 
 	d := []string{
+		"-no_rc",
 		"-as", "mkisofs",
 		"-iso-level", "3",
 		"-full-iso9660-filenames",
@@ -58,19 +60,19 @@ func (o *xorriso) defaultArgs() *xorrisoArg {
 		o.fsDir,
 	}
 	return &xorrisoArg{
-		name: "default",
+		name: "pre",
 		args: &d,
 	}
 }
 
 func (x *xorriso) Args() *[]string {
 	args := []string{}
+	pre := x.preArgs()
+	args = append(args, *pre.args...)
 	for _, a := range x.args {
 		args = append(args, *a.args...)
 	}
 
-	def := x.defaultArgs()
-	args = append(args, *def.args...)
 	return &args
 }
 
@@ -84,6 +86,8 @@ func (x *xorriso) Build(dir string, out string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
+
+	fmt.Println(*args)
 
 	return cmd.Run()
 }

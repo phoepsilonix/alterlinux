@@ -48,7 +48,6 @@ var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w *Work) error
 			return err
 		}
 
-
 		biosFilesDir := path.Join(dirs.Pacstrap, "usr", "lib", "syslinux", "bios")
 		cpFiles := []utils.CopyTask{
 			{
@@ -62,20 +61,17 @@ var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w *Work) error
 			},
 			{
 				Source: path.Join(biosFilesDir, "lpxelinux.0"),
-				Dest:  path.Join(isoSyslinuxDir, "lpxelinux.0"),
+				Dest:   path.Join(isoSyslinuxDir, "lpxelinux.0"),
 			},
 			{
 				Source: path.Join(biosFilesDir, "memdisk"),
-				Dest:  path.Join(isoSyslinuxDir, "memdisk"),
+				Dest:   path.Join(isoSyslinuxDir, "memdisk"),
 			},
 		}
 
 		if err := utils.CopyAll(cpFiles...); err != nil {
 			return err
 		}
-
-		boot.Xorriso.SetArgsForSysLinuxElTorito()
-		boot.Xorriso.SetArgsForSysLinuxElTorito()
 
 		return nil
 	})
@@ -98,5 +94,9 @@ var makeAirootfs *BuildTask = NewBuildTask("makeAirootfs", func(w *Work) error {
 })
 
 var makeOutFiles *BuildTask = NewBuildTask("makeOutFiles", func(w *Work) error {
-	return boot.Xorriso.Build(w.Base, w.target.Out)
+
+	boot.Xorriso.SetArgsForSysLinuxElTorito()
+	boot.Xorriso.SetArgsForSysLinuxElTorito()
+
+	return boot.Xorriso.Build(w.GetDirs().Iso, w.target.Out)
 })
