@@ -1,30 +1,12 @@
 package work
 
 import (
+	"path"
+
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/config"
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/chroot"
 	"github.com/spf13/cobra"
 )
-
-type BuildTask struct {
-	name string
-	task func(work *Work) error
-}
-
-func NewBuildTask(name string, task func(*Work) error) *BuildTask {
-	return &BuildTask{
-		name: name,
-		task: task,
-	}
-}
-
-func (t *BuildTask) Name() string {
-	return t.name
-}
-
-func (t *BuildTask) Run(w *Work) error {
-	return t.task(w)
-}
 
 type Work struct {
 	Base    string
@@ -32,4 +14,20 @@ type Work struct {
 	profile *config.Profile
 	target  *config.Target
 	Cmd     *cobra.Command
+}
+
+type dirs struct {
+	Work           string
+	Pacstrap       string
+	Iso            string
+	SyslinuxConfig string
+}
+
+func (w *Work) GetDirs() *dirs {
+	return &dirs{
+		Work:           w.Base,
+		Pacstrap:       path.Join(w.Base, w.target.Arch, "airootfs"),
+		Iso:            path.Join(w.Base, "iso"),
+		SyslinuxConfig: path.Join(w.profile.Base, "syslinux"),
+	}
 }

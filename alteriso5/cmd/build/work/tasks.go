@@ -8,7 +8,6 @@ import (
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/boot"
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/chroot"
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
-	cp "github.com/otiai10/copy"
 )
 
 var makeBaseDirs *BuildTask = NewBuildTask("makeBaseDirs",
@@ -41,16 +40,37 @@ var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w *Work) error
 	makeSysLinux := NewBuildTask("makeSysLinux", func(w *Work) error {
 
 		slog.Debug("Setting up SYSLINUX for BIOS booting from a disk...")
+		dirs := w.GetDirs()
 
-		isoSyslinuxDir := path.Join(w.Base, "iso", "boot", "syslinux")
+		isoSyslinuxDir := path.Join(dirs.Iso, "boot", "syslinux")
 
-		if err := utils.MkdirsAll(isoSyslinuxDir); err != nil {
+		if err := utils.MkdirsAll(isoSyslinuxDir, dirs.SyslinuxConfig); err != nil {
 			return err
 		}
 
-		profileSysLinuxDir := path.Join(w.profile.Base, "syslinux")
 
-		if err := cp.Copy(profileSysLinuxDir, isoSyslinuxDir); err != nil {
+		biosFilesDir := path.Join(dirs.Pacstrap, "usr", "lib", "syslinux", "bios")
+		cpFiles := []utils.CopyTask{
+			{
+				Source: biosFilesDir,
+				Dest:   isoSyslinuxDir,
+				Skip:   utils.OnlySpecificExtention(".c32"),
+			},
+			{
+				Source: dirs.SyslinuxConfig,
+				Dest:   isoSyslinuxDir,
+			},
+			{
+				Source: path.Join(biosFilesDir, "lpxelinux.0"),
+				Dest:  path.Join(isoSyslinuxDir, "lpxelinux.0"),
+			},
+			{
+				Source: path.Join(biosFilesDir, "memdisk"),
+				Dest:  path.Join(isoSyslinuxDir, "memdisk"),
+			},
+		}
+
+		if err := utils.CopyAll(cpFiles...); err != nil {
 			return err
 		}
 
