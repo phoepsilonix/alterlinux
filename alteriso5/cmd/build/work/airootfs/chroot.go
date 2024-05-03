@@ -24,8 +24,12 @@ func GetChrootDir(dir, arch string) (*Chroot, error) {
 
 	entry, err := os.ReadDir(dir)
 	if err != nil {
-		return nil, err
-
+		if os.IsNotExist(err) {
+			env.initilized = false
+			return &env, nil
+		} else {
+			return nil, err
+		}
 	}
 
 	if len(entry) > 0 {
@@ -57,7 +61,7 @@ func (e *Chroot) Init() error {
 }
 
 type kernel struct {
-	Linux string
+	Linux  string
 	Initrd string
 }
 
@@ -88,7 +92,7 @@ func (e *Chroot) FindKernels() ([]kernel, error) {
 
 		if ker != "" && initrd != "" {
 			kernels = append(kernels, kernel{
-				Linux: ker,
+				Linux:  ker,
 				Initrd: initrd,
 			})
 		}
