@@ -37,21 +37,30 @@ var makeChroot *BuildTask = NewBuildTask("makeChroot", func(work *Work) error {
 })
 
 var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w *Work) error {
-	slog.Debug("Setting up SYSLINUX for BIOS booting from a disk...")
 
-	isoSyslinuxDir := path.Join(w.Base, "iso", "boot", "syslinux")
+	makeSysLinux := NewBuildTask("makeSysLinux", func(w *Work) error {
 
-	if err := utils.MkdirsAll(isoSyslinuxDir); err != nil {
-		return err
-	}
+		slog.Debug("Setting up SYSLINUX for BIOS booting from a disk...")
 
-	profileSysLinuxDir := path.Join(w.profile.Base, "syslinux")
+		isoSyslinuxDir := path.Join(w.Base, "iso", "boot", "syslinux")
 
-	if err := cp.Copy(profileSysLinuxDir, isoSyslinuxDir); err != nil {
-		return err
-	}
+		if err := utils.MkdirsAll(isoSyslinuxDir); err != nil {
+			return err
+		}
 
-	return nil
+		profileSysLinuxDir := path.Join(w.profile.Base, "syslinux")
+
+		if err := cp.Copy(profileSysLinuxDir, isoSyslinuxDir); err != nil {
+			return err
+		}
+
+		boot.Xorriso.SetArgsForSysLinuxElTorito()
+		boot.Xorriso.SetArgsForSysLinuxElTorito()
+
+		return nil
+	})
+
+	return makeSysLinux.Run(w)
 })
 
 var makeAirootfs *BuildTask = NewBuildTask("makeAirootfs", func(w *Work) error {
@@ -68,13 +77,6 @@ var makeAirootfs *BuildTask = NewBuildTask("makeAirootfs", func(w *Work) error {
 	return sqfs.Build()
 })
 
-var makeBoot *BuildTask = NewBuildTask("makeBoot", func(w *Work) error {
-
-	boot.SysLinux.SetInstall(func() error {
-		return nil
-	})
-
-	modes := boot.GetModesByName(w.profile.BootModes...)
-	return boot.Setup(&modes)
-
+var makeOutFiles *BuildTask = NewBuildTask("makeOutFiles", func(w *Work) error {
+	return boot.Xorriso.Build(w.Base, w.target.Out)
 })

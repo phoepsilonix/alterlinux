@@ -3,6 +3,7 @@ package boot
 import (
 	"os"
 	"os/exec"
+	"path"
 )
 
 var Xorriso = xorriso{}
@@ -43,6 +44,9 @@ func (o *xorriso) addArg(arg *xorrisoArg) {
 }
 
 func (o *xorriso) defaultArgs() *xorrisoArg {
+
+	out := path.Join(o.out, "alterlinux.iso")
+
 	d := []string{
 		"-as", "mkisofs",
 		"-iso-level", "3",
@@ -50,7 +54,7 @@ func (o *xorriso) defaultArgs() *xorrisoArg {
 		"-joliet",
 		"-joliet-long",
 		"-rational-rock",
-		"--output", o.out,
+		"--output", out,
 		o.fsDir,
 	}
 	return &xorrisoArg{

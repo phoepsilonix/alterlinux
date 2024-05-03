@@ -5,7 +5,7 @@ import (
 )
 
 // SysLinux MBR El Torito
-func (o *xorriso) setArgsForSysLinuxElTorito() {
+func (o *xorriso) SetArgsForSysLinuxElTorito() {
 	arg := xorrisoArg{
 		name: "SysLinuxEltorito",
 	}
@@ -17,7 +17,7 @@ func (o *xorriso) setArgsForSysLinuxElTorito() {
 	o.addArg(&arg)
 }
 
-func (o *xorriso) setArgsForSysLinuxMBRBios() {
+func (o *xorriso) SetArgsForSysLinuxMBRBios() {
 
 	arg := xorrisoArg{
 		name: "SysLinuxMBRBios",
