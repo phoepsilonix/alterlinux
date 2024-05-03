@@ -1,9 +1,11 @@
 package work
 
 import (
+	"os"
 	"path"
 
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/config"
+	"github.com/Hayao0819/nahi/osutils"
 	"github.com/spf13/cobra"
 )
 
@@ -21,6 +23,12 @@ type dirs struct {
 	SyslinuxConfig string
 }
 
+func New(dir string) (*Work, error) {
+	return &Work{
+		Base: dir,
+	}, nil
+}
+
 func (w *Work) GetDirs() *dirs {
 	return &dirs{
 		Work:           w.Base,
@@ -28,4 +36,21 @@ func (w *Work) GetDirs() *dirs {
 		Iso:            path.Join(w.Base, "iso"),
 		SyslinuxConfig: path.Join(w.profile.Base, "syslinux"),
 	}
+}
+
+func (w *Work) RunOnce(task *BuildTask) error {
+	lp := path.Join(w.Base, w.target.Arch, "lockfile", task.Name())
+	if osutils.Exists(lp) {
+		return nil
+	}
+
+	if err := task.Run(w); err != nil {
+		return err
+	} else {
+		// Dont care about error
+		os.MkdirAll(path.Dir(lp), 0755)
+		os.Create(lp)
+
+	}
+	return nil
 }
