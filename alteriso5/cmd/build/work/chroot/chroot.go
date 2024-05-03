@@ -22,7 +22,7 @@ func (e *Env) Init() error {
 		return err
 	}
 
-	pacstrap := exec.Command("pacstrap", "-c", e.Dir, "base", "base-devel", "linux", "linux-firmware")
+	pacstrap := exec.Command("pacstrap", "-c", e.Dir, "base", "base-devel", "linux", "linux-firmware", "syslinux")
 	pacstrap.Env = append(os.Environ(), "LANG=C")
 	pacstrap.Stdout = os.Stdout
 	pacstrap.Stderr = os.Stderr
