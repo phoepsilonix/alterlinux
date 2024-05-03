@@ -19,6 +19,10 @@ type xorrisoArg struct {
 }
 
 func (xa *xorrisoArg) add(args ...string) {
+	if xa.args == nil {
+		xa.args = &[]string{}
+	}
+
 	arg := append(*(xa.args), args...)
 	xa.args = &arg
 }
