@@ -1,10 +1,13 @@
 package work
 
+import (
+	"fmt"
+)
+
 type BuildTask struct {
 	name string
 	task func(work Work) error
 }
-
 
 func NewBuildTask(name string, task func(Work) error) *BuildTask {
 	return &BuildTask{
@@ -18,5 +21,9 @@ func (t *BuildTask) Name() string {
 }
 
 func (t *BuildTask) Run(w *Work) error {
-	return t.task(*w)
+	err := t.task(*w)
+	if err != nil {
+		return fmt.Errorf("error running task %s: %v", t.name, err)
+	}
+	return nil
 }
