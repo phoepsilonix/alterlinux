@@ -1,12 +1,11 @@
 package work
 
 import (
-	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/airootfs"
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 )
 
 var makeBaseDirs *BuildTask = NewBuildTask("makeBaseDirs",
-	func(work *Work) error {
+	func(work Work) error {
 
 		dirs := []string{
 			work.Base,
@@ -19,11 +18,12 @@ var makeBaseDirs *BuildTask = NewBuildTask("makeBaseDirs",
 		return nil
 	})
 
-var makeChroot *BuildTask = NewBuildTask("makeChroot", func(work *Work) error {
+var makeChroot *BuildTask = NewBuildTask("makeChroot", func(work Work) error {
 
-	env, err := airootfs.New(work.GetDirs().Pacstrap, work.target.Arch)
+	env, err := work.GetChroot()
 	if err != nil {
 		return err
+
 	}
 	if err := env.Init(); err != nil {
 		return err

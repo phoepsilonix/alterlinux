@@ -7,7 +7,7 @@ import (
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 )
 
-var makeSysLinux = NewBuildTask("makeSysLinux", func(w *Work) error {
+var makeSysLinux = NewBuildTask("makeSysLinux", func(w Work) error {
 
 	slog.Debug("Setting up SYSLINUX for BIOS booting from a disk...")
 	dirs := w.GetDirs()
@@ -24,6 +24,7 @@ var makeSysLinux = NewBuildTask("makeSysLinux", func(w *Work) error {
 			Source: biosFilesDir,
 			Dest:   isoSyslinuxDir,
 			Skip:   utils.OnlySpecificExtention(".c32"),
+			Perm:   0644,
 		},
 		{
 			Source: dirs.SyslinuxConfig,
@@ -39,6 +40,24 @@ var makeSysLinux = NewBuildTask("makeSysLinux", func(w *Work) error {
 		},
 	}
 
+	chroot, err := w.GetChroot()
+	if err != nil {
+		return err
+	}
+	kernels, err := chroot.FindKernels()
+	if err != nil {
+		return err
+	}
+
+	for _, kernel := range kernels {
+		cpFiles = append(cpFiles, utils.CopyTask{
+			Source: kernel,
+			Dest:   path.Join(isoSyslinuxDir, path.Base(kernel)),
+			Perm:   0644,
+		})
+
+	}
+
 	if err := utils.CopyAll(cpFiles...); err != nil {
 		return err
 	}
@@ -46,7 +65,6 @@ var makeSysLinux = NewBuildTask("makeSysLinux", func(w *Work) error {
 	return nil
 })
 
-var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w *Work) error {
-
+var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w Work) error {
 	return w.RunOnce(makeSysLinux)
 })

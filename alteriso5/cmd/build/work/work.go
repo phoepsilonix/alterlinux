@@ -1,10 +1,12 @@
 package work
 
 import (
+	"log/slog"
 	"os"
 	"path"
 
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/config"
+	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/airootfs"
 	"github.com/Hayao0819/nahi/osutils"
 	"github.com/spf13/cobra"
 )
@@ -38,9 +40,15 @@ func (w *Work) GetDirs() *dirs {
 	}
 }
 
+func (w *Work) GetChroot() (*airootfs.Chroot, error) {
+	return airootfs.GetChrootDir(w.GetDirs().Pacstrap, w.target.Arch)
+	
+}
+
 func (w *Work) RunOnce(task *BuildTask) error {
 	lp := path.Join(w.Base, w.target.Arch, "lockfile", task.Name())
 	if osutils.Exists(lp) {
+		slog.Warn("This task has already runned", "name", task.Name())
 		return nil
 	}
 

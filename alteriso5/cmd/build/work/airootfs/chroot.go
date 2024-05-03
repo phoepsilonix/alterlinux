@@ -10,14 +10,14 @@ import (
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 )
 
-type Env struct {
+type Chroot struct {
 	Arch       string
 	Dir        string
 	initilized bool
 }
 
-func New(dir, arch string) (*Env, error) {
-	env := Env{
+func GetChrootDir(dir, arch string) (*Chroot, error) {
+	env := Chroot{
 		Arch: arch,
 		Dir:  dir,
 	}
@@ -35,7 +35,7 @@ func New(dir, arch string) (*Env, error) {
 	return &env, nil
 }
 
-func (e *Env) Init() error {
+func (e *Chroot) Init() error {
 	if err := os.MkdirAll(e.Dir, 0755); err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ func (e *Env) Init() error {
 	return nil
 }
 
-func (e *Env) FindKernels() ([]string, error) {
+func (e *Chroot) FindKernels() ([]string, error) {
 	kernels := []string{}
 
 	//bootDir := path.Join(e.Dir, "boot")
