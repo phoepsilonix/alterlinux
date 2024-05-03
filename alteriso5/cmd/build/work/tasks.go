@@ -6,7 +6,6 @@ import (
 
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/airootfs"
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/boot"
-	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/chroot"
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 )
 
@@ -26,8 +25,10 @@ var makeBaseDirs *BuildTask = NewBuildTask("makeBaseDirs",
 
 var makeChroot *BuildTask = NewBuildTask("makeChroot", func(work *Work) error {
 
-	dir := path.Join(work.Base, work.target.Arch, "airootfs")
-	env := chroot.New(dir, work.target.Arch)
+	env, err := airootfs.New(work.GetDirs().Pacstrap, work.target.Arch)
+	if err != nil {
+		return err
+	}
 	if err := env.Init(); err != nil {
 		return err
 
@@ -73,21 +74,22 @@ var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w *Work) error
 			return err
 		}
 
+		
+
 		return nil
 	})
 
-	return makeSysLinux.Run(w)
+	return w.RunOnce(makeSysLinux)
 })
 
 var makeAirootfs *BuildTask = NewBuildTask("makeAirootfs", func(w *Work) error {
 
 	slog.Debug("Copying profile to airootfs...")
 	airootfsDir := path.Join(w.Base, w.target.Arch, "airootfs")
-	isoDir := path.Join(w.Base, "iso")
 
 	sqfs := airootfs.SquashFS{
 		Base: airootfsDir,
-		Out:  path.Join(isoDir, w.profile.InstallDir, w.target.Arch, "airootfs.sfs"),
+		Out:  path.Join(w.GetDirs().Iso, w.profile.InstallDir, w.target.Arch, "airootfs.sfs"),
 	}
 
 	return sqfs.Build()
