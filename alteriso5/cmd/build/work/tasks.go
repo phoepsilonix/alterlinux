@@ -5,8 +5,8 @@ import (
 	"path"
 
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/airootfs"
+	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/boot"
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/chroot"
-	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/xorriso"
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	cp "github.com/otiai10/copy"
 )
@@ -69,14 +69,12 @@ var makeAirootfs *BuildTask = NewBuildTask("makeAirootfs", func(w *Work) error {
 })
 
 var makeBoot *BuildTask = NewBuildTask("makeBoot", func(w *Work) error {
-	// TODO: ISO以外もサポートする
 
-	opt := xorriso.Options{
-		SysLinux: true,
-	}
+	boot.SysLinux.SetInstall(func() error {
+		return nil
+	})
 
-	isodir := path.Join(w.Base, "iso")
-
-	return xorriso.Build(isodir, w.target.Out, &opt)
+	modes := boot.GetModesByName(w.profile.BootModes...)
+	return boot.Setup(&modes)
 
 })

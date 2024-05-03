@@ -26,6 +26,7 @@ func build() error {
 	profile := config.Profile{
 		Base:       path.Join(current, "profile"),
 		InstallDir: "alter",
+		BootModes:  []string{"SysLinux"},
 	}
 
 	// TODO: Add more targets
