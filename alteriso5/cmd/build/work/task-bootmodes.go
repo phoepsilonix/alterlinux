@@ -51,12 +51,12 @@ var makeSysLinux = NewBuildTask("makeSysLinux", func(w Work) error {
 
 	for _, k := range kernels {
 		cpFiles = append(cpFiles, utils.CopyTask{
-			Source: k.Linux,
-			Dest:   path.Join(isoSyslinuxDir, path.Base(k.Linux)),
+			Source: path.Join(w.GetDirs().Pacstrap, k.Linux),
+			Dest:   path.Join(dirs.Iso, "boot", path.Base(k.Linux)),
 			Perm:   0644,
 		}, utils.CopyTask{
-			Source: k.Initrd,
-			Dest:   path.Join(isoSyslinuxDir, path.Base(k.Initrd)),
+			Source: path.Join(w.GetDirs().Pacstrap, k.Initrd),
+			Dest:   path.Join(dirs.Iso, "boot", path.Base(k.Initrd)),
 			Perm:   0644,
 		})
 	}
