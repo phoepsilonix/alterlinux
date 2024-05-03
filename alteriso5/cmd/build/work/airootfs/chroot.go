@@ -56,8 +56,13 @@ func (e *Chroot) Init() error {
 	return nil
 }
 
-func (e *Chroot) FindKernels() ([]string, error) {
-	kernels := []string{}
+type kernel struct {
+	Linux string
+	Initrd string
+}
+
+func (e *Chroot) FindKernels() ([]kernel, error) {
+	kernels := []kernel{}
 
 	//bootDir := path.Join(e.Dir, "boot")
 
@@ -78,10 +83,14 @@ func (e *Chroot) FindKernels() ([]string, error) {
 			continue
 		}
 
-		kernel := env["ALL_kver"]
+		ker := env["ALL_kver"]
+		initrd := env["default_image"]
 
-		if kernel != "" {
-			kernels = append(kernels, kernel)
+		if ker != "" && initrd != "" {
+			kernels = append(kernels, kernel{
+				Linux: ker,
+				Initrd: initrd,
+			})
 		}
 
 	}
