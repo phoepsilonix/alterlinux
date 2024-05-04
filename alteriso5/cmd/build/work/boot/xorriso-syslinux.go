@@ -5,35 +5,31 @@ import (
 )
 
 // SysLinux MBR El Torito
-func (o *xorriso) SetArgsForSysLinuxElTorito() {
-	arg := xorrisoArg{
-		name:     "SysLinuxEltorito",
-		bootMode: "SysLinux",
-	}
-
-	arg.add("-eltorito-boot", "boot/syslinux/isolinux.bin")
-	arg.add("-eltorito-catalog", "boot/syslinux/boot.cat")
-	arg.add("-no-emul-boot", "-boot-load-size", "4", "-boot-info-table")
-
-	o.addArg(&arg)
+var xorrisoArgsForSysLinuxElTorito = &xorrisoArg{
+	bootMode: "SysLinux",
+	args: func(o *xorriso) []string {
+		return []string{
+			"-eltorito-boot", "boot/syslinux/isolinux.bin",
+			"-eltorito-catalog", "boot/syslinux/boot.cat",
+			"-no-emul-boot", "-boot-load-size", "4", "-boot-info-table",
+		}
+	},
 }
 
-func (o *xorriso) SetArgsForSysLinuxMBRBios() {
-
-	arg := xorrisoArg{
-		name:     "SysLinuxMBRBios",
-		bootMode: "SysLinux",
-	}
-
-	arg.add("-isohybrid-mbr", path.Join(o.fsDir, "boot", "syslinux", "isohqpfx.bin"))
-	arg.add("--mbr-force-bootable")
-	arg.add("-partition_offset", "16")
-
-	o.addArg(&arg)
-
+var xorrisoArgsForSysLinuxMBRBios = &xorrisoArg{
+	bootMode: "SysLinux",
+	args: func(o *xorriso) []string {
+		return []string{
+			"-isohybrid-mbr", path.Join(o.fsDir, "boot", "syslinux", "isohdpfx.bin"),
+			"--mbr-force-bootable",
+			"-partition_offset", "16",
+		}
+	},
 }
 
 func init() {
-	Xorriso.SetArgsForSysLinuxElTorito()
-	Xorriso.SetArgsForSysLinuxMBRBios()
+	Xorriso.addArgs(
+		xorrisoArgsForSysLinuxElTorito,
+		xorrisoArgsForSysLinuxMBRBios,
+	)
 }
