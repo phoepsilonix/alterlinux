@@ -13,6 +13,7 @@ func (work Work) Build(p config.Profile, t config.Target, c *cobra.Command) erro
 
 	tasks := []*BuildTask{
 		makeBaseDirs,
+		makeCustomAirootfs,
 		makeChroot,
 		makeBootModes,
 		makeAirootfs,
@@ -20,10 +21,7 @@ func (work Work) Build(p config.Profile, t config.Target, c *cobra.Command) erro
 	}
 
 	for _, t := range tasks {
-		//err := (*t).task(&work)
-
-		err := work.RunOnce(t)
-		if err != nil {
+		if err := work.RunOnce(t); err != nil {
 			return err
 		}
 	}

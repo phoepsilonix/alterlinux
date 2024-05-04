@@ -1,13 +1,8 @@
 package airootfs
 
 import (
-	"log/slog"
 	"os"
 	"os/exec"
-	"path"
-	"strings"
-
-	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 )
 
 type Chroot struct {
@@ -43,9 +38,6 @@ func (e *Chroot) Init() error {
 	if err := os.MkdirAll(e.Dir, 0755); err != nil {
 		return err
 	}
-	if e.initilized {
-		return nil
-	}
 
 	pacstrap := exec.Command("pacstrap", "-c", e.Dir, "base", "base-devel", "linux", "linux-firmware", "syslinux")
 	pacstrap.Env = append(os.Environ(), "LANG=C")
@@ -65,40 +57,47 @@ type kernel struct {
 	Initrd string
 }
 
+// func (e *Chroot) FindKernels() ([]kernel, error) {
+// 	kernels := []kernel{}
+
+// 	presetsDir := path.Join(e.Dir, "etc", "mkinitcpio.d")
+// 	entry, err := os.ReadDir(presetsDir)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	for _, e := range entry {
+// 		if e.IsDir() || !strings.HasSuffix(e.Name(), ".preset") {
+// 			continue
+// 		}
+
+// 		fp := path.Join(presetsDir, e.Name())
+// 		env, err := utils.LoadEnvFile(fp)
+// 		if err != nil {
+// 			continue
+// 		}
+
+// 		ker := env["ALL_kver"]
+// 		initrd := env["default_image"]
+
+// 		if ker != "" && initrd != "" {
+// 			kernels = append(kernels, kernel{
+// 				Linux:  ker,
+// 				Initrd: initrd,
+// 			})
+// 		}
+
+// 	}
+
+// 	slog.Debug("FindKernels:", "kernels", kernels)
+// 	return kernels, nil
+// }
+
 func (e *Chroot) FindKernels() ([]kernel, error) {
-	kernels := []kernel{}
-
-	//bootDir := path.Join(e.Dir, "boot")
-
-	presetsDir := path.Join(e.Dir, "etc", "mkinitcpio.d")
-	entry, err := os.ReadDir(presetsDir)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, e := range entry {
-		if e.IsDir() || !strings.HasSuffix(e.Name(), ".preset") {
-			continue
-		}
-
-		fp := path.Join(presetsDir, e.Name())
-		env, err := utils.LoadEnvFile(fp)
-		if err != nil {
-			continue
-		}
-
-		ker := env["ALL_kver"]
-		initrd := env["default_image"]
-
-		if ker != "" && initrd != "" {
-			kernels = append(kernels, kernel{
-				Linux:  ker,
-				Initrd: initrd,
-			})
-		}
-
-	}
-
-	slog.Debug("FindKernels:", "kernels", kernels)
-	return kernels, nil
+	return []kernel{
+		{
+			Linux:  "/boot/vmlinuz-linux",
+			Initrd: "/boot/initramfs-linux.img",
+		},
+	}, nil
 }
