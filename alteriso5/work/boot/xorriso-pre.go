@@ -13,6 +13,7 @@ var xorrisoCommonArgs = &xorrisoArg{
 			"-joliet",
 			"-joliet-long",
 			"-rational-rock",
+			"-volid", "ALTERLINUX",
 			"--output", out,
 			o.fsDir,
 		}
