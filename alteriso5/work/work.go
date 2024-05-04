@@ -41,8 +41,7 @@ func (w *Work) GetDirs() *dirs {
 }
 
 func (w *Work) GetChroot() (*airootfs.Chroot, error) {
-	return airootfs.GetChrootDir(w.GetDirs().Pacstrap, w.target.Arch)
-	
+	return airootfs.GetChrootDir(w.GetDirs().Pacstrap, w.target.Arch, path.Join(w.profile.Base, "pacman.conf"))
 }
 
 func (w *Work) RunOnce(task *BuildTask) error {

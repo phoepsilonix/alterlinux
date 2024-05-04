@@ -9,10 +9,11 @@ import (
 type Chroot struct {
 	Arch       string
 	Dir        string
+	Config     string
 	initilized bool
 }
 
-func GetChrootDir(dir, arch string) (*Chroot, error) {
+func GetChrootDir(dir, arch, config string) (*Chroot, error) {
 	env := Chroot{
 		Arch: arch,
 		Dir:  dir,
@@ -40,7 +41,7 @@ func (e *Chroot) Init(pkgs ...string) error {
 		return err
 	}
 
-	args := []string{"-c", e.Dir}
+	args := []string{"-c", "-C", e.Config, e.Dir}
 	args = append(args, pkgs...)
 
 	slog.Debug("pacstrap", "args", args)
