@@ -17,6 +17,7 @@ func GetChrootDir(dir, arch, config string) (*Chroot, error) {
 	env := Chroot{
 		Arch: arch,
 		Dir:  dir,
+		Config: config,
 	}
 
 	entry, err := os.ReadDir(dir)
