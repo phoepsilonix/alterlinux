@@ -4,7 +4,9 @@ import (
 	"log/slog"
 	"os"
 	"path"
+	"strings"
 
+	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	"github.com/Hayao0819/nahi/osutils"
 )
 
@@ -38,7 +40,7 @@ func FindPkgListFiles(profile string, arch string) ([]string, error) {
 		slog.Debug("Found pkglist", "files", files)
 		for _, f := range files {
 			p := path.Join(profile, d, f.Name())
-			slog.Info("Found pkglist", "file",p)
+			slog.Info("Found pkglist", "file", p)
 			findFiles = append(findFiles, p)
 		}
 	}
@@ -53,4 +55,42 @@ func FindPkgListFiles(profile string, arch string) ([]string, error) {
 	}
 
 	return retunPaths, nil
+}
+
+func ReadPkgListFile(file string) ([]string, error) {
+	pkgs := []string{}
+
+	lines, err := utils.ReadFileLine(file)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, l := range lines {
+		if l == "" || strings.HasPrefix(l, "#") {
+			continue
+		}
+		pkgs = append(pkgs, l)
+	}
+
+	return pkgs, nil
+}
+
+func GetPkgList(profile string, arch string) ([]string, error) {
+	files, err := FindPkgListFiles(profile, arch)
+	if err != nil {
+		return nil, err
+	}
+
+	pkgs := []string{}
+
+	for _, f := range files {
+		p, err := ReadPkgListFile(f)
+		if err != nil {
+			return nil, err
+		}
+
+		pkgs = append(pkgs, p...)
+	}
+
+	return pkgs, nil
 }

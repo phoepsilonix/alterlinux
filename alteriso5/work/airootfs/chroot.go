@@ -1,6 +1,7 @@
 package airootfs
 
 import (
+	"log/slog"
 	"os"
 	"os/exec"
 )
@@ -34,12 +35,17 @@ func GetChrootDir(dir, arch string) (*Chroot, error) {
 	return &env, nil
 }
 
-func (e *Chroot) Init() error {
+func (e *Chroot) Init(pkgs ...string) error {
 	if err := os.MkdirAll(e.Dir, 0755); err != nil {
 		return err
 	}
 
-	pacstrap := exec.Command("pacstrap", "-c", e.Dir, "base", "base-devel", "linux", "linux-firmware", "syslinux", "mkinitcpio-archiso")
+	args := []string{"-c", e.Dir}
+	args = append(args, pkgs...)
+
+	slog.Debug("pacstrap", "args", args)
+
+	pacstrap := exec.Command("pacstrap", args...)
 	pacstrap.Env = append(os.Environ(), "LANG=C")
 	pacstrap.Stdout = os.Stdout
 	pacstrap.Stderr = os.Stderr

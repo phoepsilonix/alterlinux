@@ -29,7 +29,6 @@ var makeCustomAirootfs *BuildTask = NewBuildTask("makeCustomAirootfs", func(w Wo
 	if err := cp.Copy(profileAirootfsDir, w.GetDirs().Pacstrap, cp.Options{
 		PreserveOwner: true,
 		Sync:          true,
-		
 	}); err != nil {
 		return err
 	}
@@ -42,9 +41,14 @@ var makeChroot *BuildTask = NewBuildTask("makeChroot", func(work Work) error {
 	env, err := work.GetChroot()
 	if err != nil {
 		return err
-
 	}
-	if err := env.Init(); err != nil {
+
+	pkglist, err := work.profile.GetPkgList(work.target.Arch)
+	if err != nil {
+		return err
+	}
+
+	if err := env.Init(pkglist...); err != nil {
 		return err
 
 	}

@@ -2,6 +2,7 @@ package work
 
 import (
 	"fmt"
+	"log/slog"
 )
 
 type BuildTask struct {
@@ -21,6 +22,8 @@ func (t *BuildTask) Name() string {
 }
 
 func (t *BuildTask) Run(w *Work) error {
+	slog.Info("Running task", "name", t.name)
+
 	err := t.task(*w)
 	if err != nil {
 		return fmt.Errorf("error running task %s: %v", t.name, err)

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"os"
 	"path"
+
+	"github.com/FascodeNet/alterlinux/alteriso5/config/pkg"
 )
 
 type Profile struct {
@@ -30,4 +32,8 @@ func ReadProfile(dir string) (*Profile, error) {
 	}
 
 	return &new, nil
+}
+
+func (p *Profile) GetPkgList(arch string) ([]string, error) {
+	return pkg.GetPkgList(p.Base,arch)
 }
