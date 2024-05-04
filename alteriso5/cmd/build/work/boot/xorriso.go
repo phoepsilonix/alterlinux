@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"slices"
 )
 
 var Xorriso = xorriso{}
@@ -16,8 +17,9 @@ type xorriso struct {
 }
 
 type xorrisoArg struct {
-	name string
-	args *[]string
+	name     string
+	bootMode string
+	args     *[]string
 }
 
 func (xa *xorrisoArg) add(args ...string) {
@@ -65,22 +67,24 @@ func (o *xorriso) preArgs() *xorrisoArg {
 	}
 }
 
-func (x *xorriso) Args() *[]string {
+func (x *xorriso) Args(bootmode ...string) *[]string {
 	args := []string{}
 	pre := x.preArgs()
 	args = append(args, *pre.args...)
 	for _, a := range x.args {
-		args = append(args, *a.args...)
+		if slices.Contains(bootmode, a.bootMode) {
+			args = append(args, *a.args...)
+		}
 	}
 
 	return &args
 }
 
-func (x *xorriso) Build(dir string, out string) error {
+func (x *xorriso) Build(dir string, out string, bootmode ...string) error {
 	x.fsDir = dir
 	x.out = out
 
-	args := x.Args()
+	args := x.Args(bootmode...)
 
 	cmd := exec.Command("xorriso", *args...)
 	cmd.Stdout = os.Stdout

@@ -7,6 +7,7 @@ import (
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 )
 
+// SysLinux
 var makeSysLinux = NewBuildTask("makeSysLinux", func(w Work) error {
 
 	slog.Debug("Setting up SYSLINUX for BIOS booting from a disk...")
@@ -68,6 +69,7 @@ var makeSysLinux = NewBuildTask("makeSysLinux", func(w Work) error {
 	return nil
 })
 
+// Run each bootmodes
 var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w Work) error {
 	return w.RunOnce(makeSysLinux)
 })

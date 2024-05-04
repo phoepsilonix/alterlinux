@@ -7,7 +7,8 @@ import (
 // SysLinux MBR El Torito
 func (o *xorriso) SetArgsForSysLinuxElTorito() {
 	arg := xorrisoArg{
-		name: "SysLinuxEltorito",
+		name:     "SysLinuxEltorito",
+		bootMode: "SysLinux",
 	}
 
 	arg.add("-eltorito-boot", "boot/syslinux/isolinux.bin")
@@ -20,7 +21,8 @@ func (o *xorriso) SetArgsForSysLinuxElTorito() {
 func (o *xorriso) SetArgsForSysLinuxMBRBios() {
 
 	arg := xorrisoArg{
-		name: "SysLinuxMBRBios",
+		name:     "SysLinuxMBRBios",
+		bootMode: "SysLinux",
 	}
 
 	arg.add("-isohybrid-mbr", path.Join(o.fsDir, "boot", "syslinux", "isohqpfx.bin"))
@@ -29,4 +31,9 @@ func (o *xorriso) SetArgsForSysLinuxMBRBios() {
 
 	o.addArg(&arg)
 
+}
+
+func init() {
+	Xorriso.SetArgsForSysLinuxElTorito()
+	Xorriso.SetArgsForSysLinuxMBRBios()
 }

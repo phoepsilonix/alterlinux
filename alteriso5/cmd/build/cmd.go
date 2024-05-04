@@ -1,7 +1,6 @@
 package build
 
 import (
-	"fmt"
 	"os"
 	"path"
 
@@ -16,11 +15,12 @@ func Cmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "build",
 		Short: "Build an ISO image",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			// Handle signals
 			utils.OnSignal(func(s os.Signal) {
-				fmt.Println("Received signal:", s)
+				cmd.Println("Received signal:", s)
 				os.Exit(1)
 			}, os.Interrupt)
 
@@ -44,15 +44,14 @@ func Cmd() *cobra.Command {
 			}
 
 			// Dummy profile
-			profile := config.Profile{
-				Base:       path.Join(current, "profile"),
-				InstallDir: "alter",
-				BootModes:  []string{"SysLinux"},
+			profile, err := config.ReadProfile(args[0])
+			if err != nil {
+				return err
 			}
 
 			// TODO: Add more targets
 			target := config.NewTarget("x86_64", outDir)
-			return work.Build(profile, target, cmd)
+			return work.Build(*profile, target, cmd)
 
 		},
 	}
