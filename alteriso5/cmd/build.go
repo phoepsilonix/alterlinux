@@ -6,5 +6,5 @@ import (
 )
 
 func init() {
-	cobrautils.AddSubCmds(build.Cmd())
+	cobrautils.RegisterSubCmd(build.Cmd())
 }

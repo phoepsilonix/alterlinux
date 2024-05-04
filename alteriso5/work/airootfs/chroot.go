@@ -39,7 +39,7 @@ func (e *Chroot) Init() error {
 		return err
 	}
 
-	pacstrap := exec.Command("pacstrap", "-c", e.Dir, "base", "base-devel", "linux", "linux-firmware", "syslinux")
+	pacstrap := exec.Command("pacstrap", "-c", e.Dir, "base", "base-devel", "linux", "linux-firmware", "syslinux", "mkinitcpio-archiso")
 	pacstrap.Env = append(os.Environ(), "LANG=C")
 	pacstrap.Stdout = os.Stdout
 	pacstrap.Stderr = os.Stderr

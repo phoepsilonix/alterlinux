@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path"
 )
@@ -29,8 +28,6 @@ func ReadProfile(dir string) (*Profile, error) {
 	if err := json.Unmarshal(data, &new); err != nil {
 		return nil, err
 	}
-
-	fmt.Println(new)
 
 	return &new, nil
 }

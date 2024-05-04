@@ -1,7 +1,7 @@
 package work
 
 import (
-	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/config"
+	"github.com/FascodeNet/alterlinux/alteriso5/config"
 	"github.com/spf13/cobra"
 )
 

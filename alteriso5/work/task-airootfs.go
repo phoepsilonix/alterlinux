@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"path"
 
-	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/airootfs"
+	"github.com/FascodeNet/alterlinux/alteriso5/work/airootfs"
 )
 
 var makeAirootfs *BuildTask = NewBuildTask("makeAirootfs", func(w Work) error {

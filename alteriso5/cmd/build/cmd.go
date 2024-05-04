@@ -4,8 +4,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/config"
-	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work"
+	"github.com/FascodeNet/alterlinux/alteriso5/config"
+	"github.com/FascodeNet/alterlinux/alteriso5/work"
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/check"
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	"github.com/spf13/cobra"

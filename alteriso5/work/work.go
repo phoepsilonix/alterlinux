@@ -5,8 +5,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/config"
-	"github.com/FascodeNet/alterlinux/alteriso5/cmd/build/work/airootfs"
+	"github.com/FascodeNet/alterlinux/alteriso5/config"
+	"github.com/FascodeNet/alterlinux/alteriso5/work/airootfs"
 	"github.com/Hayao0819/nahi/osutils"
 	"github.com/spf13/cobra"
 )
