@@ -14,7 +14,7 @@ var makeAirootfs *BuildTask = NewBuildTask("makeAirootfs", func(w Work) error {
 
 	sqfs := airootfs.SquashFS{
 		Base: airootfsDir,
-		Out:  path.Join(w.GetDirs().Iso, w.profile.InstallDir, w.target.Arch, "airootfs.sfs"),
+		Out:  path.Join(w.Dirs.Iso, w.profile.InstallDir, w.target.Arch, "airootfs.sfs"),
 	}
 
 	return sqfs.Build()

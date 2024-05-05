@@ -26,7 +26,7 @@ var makeCustomAirootfs *BuildTask = NewBuildTask("makeCustomAirootfs", func(w Wo
 	slog.Info("Copying custom airootfs files...")
 	profileAirootfsDir := path.Join(w.profile.Base, "airootfs")
 
-	if err := cp.Copy(profileAirootfsDir, w.GetDirs().Pacstrap, cp.Options{
+	if err := cp.Copy(profileAirootfsDir, w.Dirs.Pacstrap, cp.Options{
 		PreserveOwner: true,
 		Sync:          true,
 	}); err != nil {

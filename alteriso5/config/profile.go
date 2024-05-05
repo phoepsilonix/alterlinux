@@ -9,11 +9,12 @@ import (
 )
 
 type Profile struct {
-	Base       string
-	InstallDir string   `json:"install_dir"`
-	BootModes  []string `json:"bootmodes"`
-	ISOName    string   `json:"iso_name"`
-	ISOLabel   string   `json:"iso_label"`
+	Base             string
+	InstallDir       string   `json:"install_dir"`
+	BootModes        []string `json:"bootmodes"`
+	ISOName          string   `json:"iso_name"`
+	ISOLabel         string   `json:"iso_label"`
+	UseAlterSysLinux bool     `json:"use_alter_syslinux"`
 }
 
 func ReadProfile(dir string) (*Profile, error) {
@@ -35,5 +36,5 @@ func ReadProfile(dir string) (*Profile, error) {
 }
 
 func (p *Profile) GetPkgList(arch string) ([]string, error) {
-	return pkg.GetPkgList(p.Base,arch)
+	return pkg.GetPkgList(p.Base, arch)
 }

@@ -16,32 +16,58 @@ type Work struct {
 	profile *config.Profile
 	target  *config.Target
 	Cmd     *cobra.Command
+	Dirs    *dirs
 }
 
 type dirs struct {
+	Current        string
+	Data           string
 	Work           string
 	Pacstrap       string
 	Iso            string
 	SyslinuxConfig string
 }
 
-func New(dir string) (*Work, error) {
-	return &Work{
-		Base: dir,
-	}, nil
+type configValues struct {
+	Arch  string
+	Label string
 }
 
-func (w *Work) GetDirs() *dirs {
-	return &dirs{
+func New(dir string) (*Work, error) {
+
+	w := Work{
+		Base: dir,
+	}
+
+	dirs, err := w.GetDirs()
+	if err != nil {
+		return nil, err
+	}
+
+	w.Dirs = dirs
+
+	return &w, nil
+}
+
+func (w *Work) GetDirs() (*dirs, error) {
+	current, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+
+	dv := dirs{
+		Current:        current,
+		Data:           path.Join(current, "data"),
 		Work:           w.Base,
 		Pacstrap:       path.Join(w.Base, w.target.Arch, "airootfs"),
 		Iso:            path.Join(w.Base, "iso"),
-		SyslinuxConfig: path.Join(w.profile.Base, "syslinux"),
 	}
+
+	return &dv, nil
 }
 
 func (w *Work) GetChroot() (*airootfs.Chroot, error) {
-	return airootfs.GetChrootDir(w.GetDirs().Pacstrap, w.target.Arch, path.Join(w.profile.Base, "pacman.conf"))
+	return airootfs.GetChrootDir(w.Dirs.Pacstrap, w.target.Arch, path.Join(w.profile.Base, "pacman.conf"))
 }
 
 func (w *Work) RunOnce(task *BuildTask) error {
@@ -60,4 +86,13 @@ func (w *Work) RunOnce(task *BuildTask) error {
 
 	}
 	return nil
+}
+
+func (w *Work) Values() *configValues {
+	v := configValues{
+		Arch:  w.target.Arch,
+		Label: w.profile.ISOLabel,
+	}
+
+	return &v
 }
