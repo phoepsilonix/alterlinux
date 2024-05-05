@@ -2,48 +2,57 @@ package boot
 
 import "errors"
 
-type Mode int
+type Mode struct {
+	name     string
+	validate func() error
+}
 
 var (
-	BiosSyslinuxMbr             Mode = 0
-	BiosSyslinuxElTorito        Mode = 1
-	UefiIa32SystemdBootEsp      Mode = 2
-	UefiX64SystemdBootEsp       Mode = 3
-	UefiIa32SystemdBootElTorito Mode = 4
-	UefiX64SystemdBootElTorito  Mode = 5
-	UefiX64GrubEsp              Mode = 6
-	UefiIa32GrubEsp             Mode = 7
-	UefiX64GrubElTorito         Mode = 8
-	UefiIa32GrubElTorito        Mode = 9
+	BiosSyslinuxMbr             Mode = Mode{"bios.syslinux.mbr", nil}
+	BiosSyslinuxElTorito        Mode = Mode{"bios.syslinux.eltorito", nil}
+	UefiIa32SystemdBootEsp      Mode = Mode{"uefi-ia32.systemd-boot.esp", nil}
+	UefiX64SystemdBootEsp       Mode = Mode{"uefi-x64.systemd-boot.esp", nil}
+	UefiIa32SystemdBootElTorito Mode = Mode{"uefi-ia32.systemd-boot.eltorito", nil}
+	UefiX64SystemdBootElTorito  Mode = Mode{"uefi-x64.systemd-boot.eltorito", nil}
+	UefiX64GrubEsp              Mode = Mode{"uefi-x64.grub.esp", nil}
+	UefiIa32GrubEsp             Mode = Mode{"uefi-ia32.grub.esp", nil}
+	UefiX64GrubElTorito         Mode = Mode{"uefi-x64.grub.eltorito", nil}
+	UefiIa32GrubElTorito        Mode = Mode{"uefi-ia32.grub.eltorito", nil}
+
+	Modes = []Mode{
+		BiosSyslinuxMbr,
+		BiosSyslinuxElTorito,
+		UefiIa32SystemdBootEsp,
+		UefiX64SystemdBootEsp,
+		UefiIa32SystemdBootElTorito,
+		UefiX64SystemdBootElTorito,
+		UefiX64GrubEsp,
+		UefiIa32GrubEsp,
+		UefiX64GrubElTorito,
+		UefiIa32GrubElTorito,
+	}
 )
+
+func (m *Mode) String() string {
+	return m.name
+}
+
+func (m *Mode) Validate() error {
+	if m.validate != nil {
+		return m.validate()
+	}
+	return nil
+}
 
 var ErrInvalidMode = errors.New("invalid boot mode")
 
 func getModeFromStr(mode string) (Mode, error) {
-	switch mode {
-	case "bios.syslinux.mbr":
-		return BiosSyslinuxMbr, nil
-	case "bios.syslinux.eltorito":
-		return BiosSyslinuxElTorito, nil
-	case "uefi-ia32.systemd-boot.esp":
-		return UefiIa32SystemdBootEsp, nil
-	case "uefi-x64.systemd-boot.esp":
-		return UefiX64SystemdBootEsp, nil
-	case "uefi-ia32.systemd-boot.eltorito":
-		return UefiIa32SystemdBootElTorito, nil
-	case "uefi-x64.systemd-boot.eltorito":
-		return UefiX64SystemdBootElTorito, nil
-	case "uefi-x64.grub.esp":
-		return UefiX64GrubEsp, nil
-	case "uefi-ia32.grub.esp":
-		return UefiIa32GrubEsp, nil
-	case "uefi-x64.grub.eltorito":
-		return UefiX64GrubElTorito, nil
-	case "uefi-ia32.grub.eltorito":
-		return UefiIa32GrubElTorito, nil
-
+	for _, m := range Modes {
+		if m.name == mode {
+			return m, nil
+		}
 	}
-	return 0, ErrInvalidMode
+	return Mode{}, ErrInvalidMode
 }
 
 func GetModes(modes ...string) ([]Mode, error) {

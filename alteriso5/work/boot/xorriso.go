@@ -29,9 +29,10 @@ func (x *xorriso) Args(bootmode ...Mode) *[]string {
 	args = append(args, xorrisoCommonArgs.args(x)...)
 
 	for _, arg := range x.args {
-		if bootmode[0] == arg.bootMode {
-			slog.Debug("Adding xorriso args", "mode", arg.bootMode, "args", arg.args)
-			args = append(args, arg.args(x)...)
+		for _, mode := range bootmode {
+			if arg.bootMode.String() == mode.String() {
+				args = append(args, arg.args(x)...)
+			}
 		}
 	}
 	return &args
