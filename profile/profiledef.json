@@ -1,0 +1,5 @@
+{
+  "install_dir": "alter",
+  "bootmodes": ["bios.syslinux.mbr"],
+  "use_alter_syslinux": true
+}
