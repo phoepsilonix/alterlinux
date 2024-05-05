@@ -26,7 +26,7 @@ func (t *BuildTask) Run(w *Work) error {
 
 	err := t.task(*w)
 	if err != nil {
-		return fmt.Errorf("error running task %s: %v", t.name, err)
+		return fmt.Errorf("error on %s: %v", t.name, err)
 	}
 	return nil
 }

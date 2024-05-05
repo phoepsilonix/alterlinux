@@ -4,10 +4,10 @@ import (
 	"os"
 	"path"
 
-	"github.com/FascodeNet/alterlinux/alteriso5/config"
-	"github.com/FascodeNet/alterlinux/alteriso5/work"
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/check"
+	"github.com/FascodeNet/alterlinux/alteriso5/config"
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
+	"github.com/FascodeNet/alterlinux/alteriso5/work"
 	"github.com/spf13/cobra"
 )
 
@@ -37,13 +37,7 @@ func Cmd() *cobra.Command {
 			workDir := path.Join(current, "work")
 			outDir := path.Join(current, "out")
 
-			// Prepare work environment
-			work, err := work.New(workDir)
-			if err != nil {
-				return err
-			}
-
-			// Dummy profile
+			// Read profile
 			profile, err := config.ReadProfile(args[0])
 			if err != nil {
 				return err
@@ -51,7 +45,7 @@ func Cmd() *cobra.Command {
 
 			// TODO: Add more targets
 			target := config.NewTarget("x86_64", outDir)
-			return work.Build(*profile, target, cmd)
+			return work.New(workDir).Build(*profile, target, cmd)
 
 		},
 	}

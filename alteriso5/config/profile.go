@@ -6,15 +6,17 @@ import (
 	"path"
 
 	"github.com/FascodeNet/alterlinux/alteriso5/config/pkg"
+	"github.com/FascodeNet/alterlinux/alteriso5/work/boot"
 )
 
 type Profile struct {
 	Base             string
 	InstallDir       string   `json:"install_dir"`
-	BootModes        []string `json:"bootmodes"`
-	ISOName          string   `json:"iso_name"`
-	ISOLabel         string   `json:"iso_label"`
-	UseAlterSysLinux bool     `json:"use_alter_syslinux"`
+	BootModesStr     []string `json:"bootmodes"`
+	BootModes        []boot.Mode
+	ISOName          string `json:"iso_name"`
+	ISOLabel         string `json:"iso_label"`
+	UseAlterSysLinux bool   `json:"use_alter_syslinux"`
 }
 
 func ReadProfile(dir string) (*Profile, error) {
@@ -31,6 +33,12 @@ func ReadProfile(dir string) (*Profile, error) {
 	if err := json.Unmarshal(data, &new); err != nil {
 		return nil, err
 	}
+
+	modes, err := boot.GetModes(new.BootModesStr...)
+	if err != nil {
+		return nil, err
+	}
+	new.BootModes = modes
 
 	return &new, nil
 }

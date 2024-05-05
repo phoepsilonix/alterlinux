@@ -4,12 +4,7 @@ import "github.com/FascodeNet/alterlinux/alteriso5/work/boot"
 
 // Run each bootmodes
 var makeBootModes *BuildTask = NewBuildTask("makeBootModes", func(w Work) error {
-	modes, err := boot.GetModes(w.profile.BootModes...)
-	if err != nil {
-		return err
-	}
-
-	for _, mode := range modes {
+	for _, mode := range w.profile.BootModes {
 		switch mode {
 		case boot.BiosSyslinuxMbr:
 			if err := w.RunOnce(makeBiosSysLinuxMbr); err != nil {

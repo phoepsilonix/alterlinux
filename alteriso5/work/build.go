@@ -7,9 +7,15 @@ import (
 
 func (work Work) Build(p config.Profile, t config.Target, c *cobra.Command) error {
 
+	// Setup work
 	work.profile = &p
 	work.target = &t
 	work.Cmd = c
+	dirs, err := work.GetDirs()
+	if err != nil {
+		return err
+	}
+	work.Dirs = dirs
 
 	tasks := []*BuildTask{
 		makeBaseDirs,

@@ -20,12 +20,11 @@ type Work struct {
 }
 
 type dirs struct {
-	Current        string
-	Data           string
-	Work           string
-	Pacstrap       string
-	Iso            string
-	SyslinuxConfig string
+	Current  string
+	Data     string
+	Work     string
+	Pacstrap string
+	Iso      string
 }
 
 type configValues struct {
@@ -33,20 +32,12 @@ type configValues struct {
 	Label string
 }
 
-func New(dir string) (*Work, error) {
+func New(dir string) *Work {
 
 	w := Work{
 		Base: dir,
 	}
-
-	dirs, err := w.GetDirs()
-	if err != nil {
-		return nil, err
-	}
-
-	w.Dirs = dirs
-
-	return &w, nil
+	return &w
 }
 
 func (w *Work) GetDirs() (*dirs, error) {
@@ -56,11 +47,11 @@ func (w *Work) GetDirs() (*dirs, error) {
 	}
 
 	dv := dirs{
-		Current:        current,
-		Data:           path.Join(current, "data"),
-		Work:           w.Base,
-		Pacstrap:       path.Join(w.Base, w.target.Arch, "airootfs"),
-		Iso:            path.Join(w.Base, "iso"),
+		Current:  current,
+		Data:     path.Join(current, "alteriso5", "data"),
+		Work:     w.Base,
+		Pacstrap: path.Join(w.Base, w.target.Arch, "airootfs"),
+		Iso:      path.Join(w.Base, "iso"),
 	}
 
 	return &dv, nil

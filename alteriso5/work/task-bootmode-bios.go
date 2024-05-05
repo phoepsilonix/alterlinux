@@ -14,17 +14,20 @@ var makeBiosSysLinuxMbr = NewBuildTask("makeBiosSysLinuxMbr", func(w Work) error
 	slog.Debug("Setting up SYSLINUX for BIOS booting from a disk...")
 
 	// Get directories
+	println("getdirs")
 	dirs := w.Dirs
 	isoSyslinuxDir := path.Join(dirs.Iso, "boot", "syslinux")
 	biosFilesDir := path.Join(dirs.Pacstrap, "usr", "lib", "syslinux", "bios")
 
 	// Create directories
-	if err := utils.MkdirsAll(isoSyslinuxDir, dirs.SyslinuxConfig); err != nil {
+	if err := os.MkdirAll(isoSyslinuxDir, 0755); err != nil {
+
 		return err
 	}
 
 	// syslinux config
 	orgSyslinuxConfigDir := ""
+	println("usealtersyslinux")
 	if w.profile.UseAlterSysLinux {
 		orgSyslinuxConfigDir = path.Join(dirs.Data, "syslinux")
 	} else {
@@ -38,7 +41,8 @@ var makeBiosSysLinuxMbr = NewBuildTask("makeBiosSysLinuxMbr", func(w Work) error
 	if err := os.MkdirAll(sysLinuxConfigDir, 0755); err != nil {
 		return err
 	}
-	if err := sc.ParseAndBuild(w.Values(), sysLinuxConfigDir); err != nil {
+	workSyslinuxConfigDir := path.Join(dirs.Work, w.target.Arch, "syslinux")
+	if err := sc.ParseAndBuild(w.Values(), workSyslinuxConfigDir); err != nil {
 		return err
 	}
 
@@ -51,7 +55,7 @@ var makeBiosSysLinuxMbr = NewBuildTask("makeBiosSysLinuxMbr", func(w Work) error
 			Perm:   0644,
 		},
 		{
-			Source: dirs.SyslinuxConfig,
+			Source: workSyslinuxConfigDir,
 			Dest:   isoSyslinuxDir,
 		},
 		{
