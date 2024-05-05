@@ -97,5 +97,24 @@ var makeBiosSysLinuxMbr = NewBuildTask("makeBiosSysLinuxMbr", func(w Work) error
 })
 
 var makeBiosSysLinuxElTorito = NewBuildTask("makeBiosSysLinuxElTorito", func(w Work) error {
+
+	//workSyslinuxConfigDir := path.Join(dirs.Work, w.target.Arch, "syslinux")
+	isoSyslinuxDir := path.Join(w.Dirs.Iso, "boot", "syslinux")
+	biosFilesDir := path.Join(w.Dirs.Pacstrap, "usr", "lib", "syslinux", "bios")
+
+	cpFiles := []utils.CopyTask{
+		{
+			Source: path.Join(biosFilesDir, "isolinux.bin"),
+			Dest:   path.Join(isoSyslinuxDir, "isolinux.bin"),
+		},
+		{
+			Source: path.Join(biosFilesDir, "isohdpfx.bin"),
+			Dest:   path.Join(isoSyslinuxDir, "isohdpfx.bin"),
+		},
+	}
+
+	if err := utils.CopyAll(cpFiles...); err != nil {
+		return err
+	}
 	return nil
 })
