@@ -10,7 +10,7 @@ import (
 )
 
 // SysLinux
-var makeSysLinux = NewBuildTask("makeSysLinux", func(w Work) error {
+var makeBiosSysLinuxMbr = NewBuildTask("makeBiosSysLinuxMbr", func(w Work) error {
 	slog.Debug("Setting up SYSLINUX for BIOS booting from a disk...")
 
 	// Get directories
@@ -89,5 +89,9 @@ var makeSysLinux = NewBuildTask("makeSysLinux", func(w Work) error {
 		return err
 	}
 
+	return nil
+})
+
+var makeBiosSysLinuxElTorito = NewBuildTask("makeBiosSysLinuxElTorito", func(w Work) error {
 	return nil
 })
