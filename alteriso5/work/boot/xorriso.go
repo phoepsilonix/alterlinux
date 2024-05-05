@@ -1,7 +1,6 @@
 package boot
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
 	"os/exec"
@@ -49,7 +48,7 @@ func (x *xorriso) Build(dir string, out string, bootmode ...Mode) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 
-	fmt.Println(*args)
+	slog.Debug("Running xorriso", "args", cmd.Args)
 
 	return cmd.Run()
 }
