@@ -1,11 +1,7 @@
-github.com/Hayao0819/go-distro v0.0.0-20230622042208-721ffcbed8c9 h1:BQ8X+dlAW2hXv598aJF2Xe0z6lG5zwCD59h07PJemRY=
-github.com/Hayao0819/go-distro v0.0.0-20230622042208-721ffcbed8c9/go.mod h1:C7RUU7FdBZWMNpHLW23ZoaRZnFraq9CEyEPgA6KIuwY=
 github.com/Hayao0819/go-distro v0.0.0-20240502045834-6a4198612fca h1:o/8EO1u8fmMfdGUedHN+OvZrLb5kafLdVj4hcQtCkf8=
 github.com/Hayao0819/go-distro v0.0.0-20240502045834-6a4198612fca/go.mod h1:C7RUU7FdBZWMNpHLW23ZoaRZnFraq9CEyEPgA6KIuwY=
-github.com/Hayao0819/nahi v0.0.0-20240206062916-9e007fa67d66 h1:fylheZbDj30rUrGb4kj9uvtjGsiMREWpKwVQeFDWpUE=
-github.com/Hayao0819/nahi v0.0.0-20240206062916-9e007fa67d66/go.mod h1:P3boyG1B2+4/J6ln65zsY2XRFitM/LcvKppzwXAPjGw=
-github.com/Hayao0819/nahi v0.0.0-20240502081056-dc44714fa053 h1:ayYNdaEWZFhEjFqSTcqtZBZFxLLSdGKhBM7R5dM0rm4=
-github.com/Hayao0819/nahi v0.0.0-20240502081056-dc44714fa053/go.mod h1:P3boyG1B2+4/J6ln65zsY2XRFitM/LcvKppzwXAPjGw=
+github.com/Hayao0819/nahi v0.0.0-20240506173511-aa8a1a06908e h1:izLYnTxEYfQvr0BltY/ploo3eOCMel674yZG0jDDaFM=
+github.com/Hayao0819/nahi v0.0.0-20240506173511-aa8a1a06908e/go.mod h1:6y4OH/3jDW6HX3L2LoaE+GvNlqAzUG0hrpba9U1b2XA=
 github.com/ashcrow/osrelease v0.0.0-20180626175927-9b292693c55c h1:icme0QhxrgZOxTBnT6K8dfGLwbKWSOVwPB95XTbo8Ws=
 github.com/ashcrow/osrelease v0.0.0-20180626175927-9b292693c55c/go.mod h1:BRljTyotlu+6N+Qlu5MhjxpdmccCnp9lDvZjNNV8qr4=
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
@@ -13,6 +9,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/fatih/color v1.15.0 h1:kOqh6YHBtK8aywxGerMG2Eq3H6Qgoqeo13Bk2Mv/nBs=
 github.com/fatih/color v1.15.0/go.mod h1:0h5ZqXfHYED7Bhv2ZJamyIOUej9KtShiJESRwBDUSsw=
+github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
+github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
@@ -24,6 +22,8 @@ github.com/m-mizutani/clog v0.0.4 h1:6hY5CzHwNS4zuJhF6puazYPtGeaEEGIbrD4Ccimyaow
 github.com/m-mizutani/clog v0.0.4/go.mod h1:a2J7BlnXOkaMQ0fNeDBG3IyyyWnCnSKYH8ltHFNDcHE=
 github.com/m-mizutani/goerr v0.1.8 h1:6UtsMmOkJsaYNtAsMNLvWIteZPl1NOxpKFYK5m65vpQ=
 github.com/m-mizutani/goerr v0.1.8/go.mod h1:fQkXuu06q+oLlp4FkbiTFzI/N/+WAK/Mz1W5kPZ6yzs=
+github.com/m-mizutani/gt v0.0.5 h1:mnFJDOfNe5adq2zOxhN1MABX9euu/+086xMRKG/oDgc=
+github.com/m-mizutani/gt v0.0.5/go.mod h1:0MPYSfGBLmYjTduzADVmIqD58ELQ5IfBFiK/f0FmB3k=
 github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=
 github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovkB8vQcUbaXHg=
 github.com/mattn/go-isatty v0.0.16/go.mod h1:kYGgaQfpe5nmfYZH+SKPsOc2e4SrIfOl2e/yFXSvRLM=
@@ -45,8 +45,6 @@ github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o
 golang.org/x/sync v0.3.0 h1:ftCYgMx6zT/asHUrPw8BLLscYtGznsLAnjq5RH9P66E=
 golang.org/x/sync v0.3.0/go.mod h1:FU7BRWz2tNW+3quACPkgCx/L+uEAv1htQ0V83Z9Rj+Y=
 golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
-golang.org/x/sys v0.5.0 h1:MUK/U/4lj1t1oPg0HfuXDN/Z1wv31ZJ/YcPiGccS4DU=
-golang.org/x/sys v0.5.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.8.0 h1:EBmGv8NaZBZTWvrbjNoL6HVt+IVy3QDQpJs7VRIw3tU=
 golang.org/x/sys v0.8.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

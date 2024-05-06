@@ -6,9 +6,9 @@ import (
 
 	"github.com/FascodeNet/alterlinux/alteriso5/cmd/check"
 	"github.com/FascodeNet/alterlinux/alteriso5/config"
-	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	"github.com/FascodeNet/alterlinux/alteriso5/work"
 	"github.com/Hayao0819/nahi/cobrautils"
+	"github.com/Hayao0819/nahi/sigutils"
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +20,7 @@ func Cmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			// Handle signals
-			utils.OnSignal(func(s os.Signal) {
+			sigutils.OnSignal(func(s os.Signal) {
 				cmd.Println("Received signal:", s)
 				os.Exit(1)
 			}, os.Interrupt)

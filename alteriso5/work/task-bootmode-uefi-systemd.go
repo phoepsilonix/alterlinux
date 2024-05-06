@@ -5,7 +5,6 @@ import (
 	"os"
 	"path"
 
-	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	"github.com/FascodeNet/alterlinux/alteriso5/work/boot"
 	"github.com/Hayao0819/nahi/osutils"
 )
@@ -58,7 +57,7 @@ var makeCommonSystemdBoot *BuildTask = NewBuildTask("makeCommonSystemdBoot", fun
 		}
 
 		for _, f := range efiboot_files {
-			if s, err := utils.GetFileSize(f); err == nil {
+			if s, err := osutils.GetFileSize(f); err == nil {
 				total += s
 			} else {
 				slog.Warn("Failed to get file size", "file", f, "error", err)
@@ -73,7 +72,7 @@ var makeCommonSystemdBoot *BuildTask = NewBuildTask("makeCommonSystemdBoot", fun
 	if err := os.MkdirAll(path.Join(w.Base, w.target.Arch, "efiboot"), 0755); err != nil {
 		return err
 	}
-	sizes, err := utils.GetFileSizesInDir(path.Join(w.Base, w.target.Arch, "efiboot"))
+	sizes, err := osutils.GetFileSizesInDir(path.Join(w.Base, w.target.Arch, "efiboot"))
 	if err != nil {
 		return err
 	}

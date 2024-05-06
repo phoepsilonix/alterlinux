@@ -5,8 +5,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	"github.com/FascodeNet/alterlinux/alteriso5/work/boot"
+	"github.com/Hayao0819/nahi/cputils"
 )
 
 // SysLinux
@@ -47,11 +47,11 @@ var makeBiosSysLinuxMbr = NewBuildTask("makeBiosSysLinuxMbr", func(w Work) error
 	}
 
 	// Copy files
-	cpFiles := []utils.CopyTask{
+	cpFiles := []cputils.CopyTask{
 		{
 			Source: biosFilesDir,
 			Dest:   isoSyslinuxDir,
-			Skip:   utils.OnlySpecificExtention(".c32"),
+			Skip:   cputils.OnlySpecificExtention(".c32"),
 			Perm:   0644,
 		},
 		{
@@ -78,18 +78,18 @@ var makeBiosSysLinuxMbr = NewBuildTask("makeBiosSysLinuxMbr", func(w Work) error
 	}
 
 	for _, k := range kernels {
-		cpFiles = append(cpFiles, utils.CopyTask{
+		cpFiles = append(cpFiles, cputils.CopyTask{
 			Source: path.Join(w.Dirs.Pacstrap, k.Linux),
 			Dest:   path.Join(dirs.Iso, "boot", w.target.Arch, path.Base(k.Linux)),
 			Perm:   0644,
-		}, utils.CopyTask{
+		}, cputils.CopyTask{
 			Source: path.Join(w.Dirs.Pacstrap, k.Initrd),
 			Dest:   path.Join(dirs.Iso, "boot", w.target.Arch, path.Base(k.Initrd)),
 			Perm:   0644,
 		})
 	}
 
-	if err := utils.CopyAll(cpFiles...); err != nil {
+	if err := cputils.CopyAll(cpFiles...); err != nil {
 		return err
 	}
 
@@ -102,7 +102,7 @@ var makeBiosSysLinuxElTorito = NewBuildTask("makeBiosSysLinuxElTorito", func(w W
 	isoSyslinuxDir := path.Join(w.Dirs.Iso, "boot", "syslinux")
 	biosFilesDir := path.Join(w.Dirs.Pacstrap, "usr", "lib", "syslinux", "bios")
 
-	cpFiles := []utils.CopyTask{
+	cpFiles := []cputils.CopyTask{
 		{
 			Source: path.Join(biosFilesDir, "isolinux.bin"),
 			Dest:   path.Join(isoSyslinuxDir, "isolinux.bin"),
@@ -113,7 +113,7 @@ var makeBiosSysLinuxElTorito = NewBuildTask("makeBiosSysLinuxElTorito", func(w W
 		},
 	}
 
-	if err := utils.CopyAll(cpFiles...); err != nil {
+	if err := cputils.CopyAll(cpFiles...); err != nil {
 		return err
 	}
 	return nil

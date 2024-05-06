@@ -6,7 +6,6 @@ import (
 	"path"
 	"strings"
 
-	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	"github.com/Hayao0819/nahi/osutils"
 )
 
@@ -60,7 +59,7 @@ func FindPkgListFiles(profile string, arch string) ([]string, error) {
 func ReadPkgListFile(file string) ([]string, error) {
 	pkgs := []string{}
 
-	lines, err := utils.ReadFileLine(file)
+	lines, err := osutils.ReadFileLine(file)
 	if err != nil {
 		return nil, err
 	}
