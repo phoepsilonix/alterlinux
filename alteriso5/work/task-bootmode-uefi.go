@@ -66,6 +66,7 @@ var makeCommonSystemdBootConfig *BuildTask = NewBuildTask("makeCommonSystemdBoot
 		}
 
 		slog.Debug("Found files for efiboot", "files", efiboot_files)
+
 	}
 
 	// For efiboot files
@@ -81,7 +82,8 @@ var makeCommonSystemdBootConfig *BuildTask = NewBuildTask("makeCommonSystemdBoot
 	}
 
 	slog.Debug("efiboot img size", "size", total)
-	return nil
+
+	return boot.MakeEfiBootImg(path.Join(w.Base, "efiboot.img"), total)
 })
 
 var makeCommonSystemdBoot *BuildTask = NewBuildTask("makeCommonSystemdBoot", func(w Work) error {

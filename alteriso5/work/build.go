@@ -18,6 +18,7 @@ func (work Work) Build(p config.Profile, t config.Target, c *cobra.Command) erro
 	work.Dirs = dirs
 
 	tasks := []*BuildTask{
+		validate,
 		makeBaseDirs,
 		makeCustomAirootfs,
 		makeChroot,
