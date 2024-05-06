@@ -1,5 +1,9 @@
 {
   "install_dir": "alter",
-  "bootmodes": ["bios.syslinux.mbr", "bios.syslinux.eltorito"],
+  "bootmodes": [
+    "bios.syslinux.mbr",
+    "bios.syslinux.eltorito",
+    "uefi-x64.systemd-boot.esp"
+  ],
   "use_alter_syslinux": true
 }

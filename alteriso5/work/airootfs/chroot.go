@@ -15,8 +15,8 @@ type Chroot struct {
 
 func GetChrootDir(dir, arch, config string) (*Chroot, error) {
 	env := Chroot{
-		Arch: arch,
-		Dir:  dir,
+		Arch:   arch,
+		Dir:    dir,
 		Config: config,
 	}
 
@@ -63,6 +63,10 @@ func (e *Chroot) Init(pkgs ...string) error {
 type kernel struct {
 	Linux  string
 	Initrd string
+}
+
+func (k *kernel) Files() []string {
+	return []string{k.Linux, k.Initrd}
 }
 
 // func (e *Chroot) FindKernels() ([]kernel, error) {
