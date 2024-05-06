@@ -15,7 +15,7 @@ type xorriso struct {
 }
 
 type xorrisoArg struct {
-	bootMode Mode
+	bootMode *Mode
 	args     func(o *xorriso) []string
 }
 
@@ -23,7 +23,7 @@ func (x *xorriso) addArgs(arg ...*xorrisoArg) {
 	x.args = append(x.args, arg...)
 }
 
-func (x *xorriso) Args(bootmode ...Mode) *[]string {
+func (x *xorriso) Args(bootmode ...*Mode) *[]string {
 	var args []string
 
 	args = append(args, xorrisoCommonArgs.args(x)...)
@@ -38,7 +38,7 @@ func (x *xorriso) Args(bootmode ...Mode) *[]string {
 	return &args
 }
 
-func (x *xorriso) Build(dir string, out string, bootmode ...Mode) error {
+func (x *xorriso) Build(dir string, out string, bootmode ...*Mode) error {
 	x.fsDir = dir
 	x.out = out
 
