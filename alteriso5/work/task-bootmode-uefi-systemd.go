@@ -11,7 +11,7 @@ import (
 )
 
 // Prepare configuration files for systemd-boot
-var makeCommonSystemdBootConfig *BuildTask = NewBuildTask("makeCommonSystemdBootConfig", func(w Work) error {
+var makeCommonSystemdBoot *BuildTask = NewBuildTask("makeCommonSystemdBoot", func(w Work) error {
 	var total int64 = 0
 	// TODO: Get ucode list
 
@@ -86,8 +86,18 @@ var makeCommonSystemdBootConfig *BuildTask = NewBuildTask("makeCommonSystemdBoot
 	return boot.MakeEfiBootImg(path.Join(w.Base, "efiboot.img"), total)
 })
 
-var makeCommonSystemdBoot *BuildTask = NewBuildTask("makeCommonSystemdBoot", func(w Work) error {
+var makeCommonSystemdBootConfig *BuildTask = NewBuildTask("makeCommonSystemdBootConfig", func(w Work) error {
+	workLoaderDir := path.Join(w.Base, w.target.Arch, "loader")
+	if err := os.MkdirAll(path.Join(workLoaderDir, "entries"), 0755); err != nil {
+		return err
+	}
+
+	// cpTasks := utils.CopyTask{
+
+	// }
+
 	return nil
+
 })
 
 var makeUefiX64SystemdBootEsp *BuildTask = NewBuildTask("makeUefiX64SystemdBootEsp", func(w Work) error {

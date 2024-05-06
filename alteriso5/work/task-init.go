@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"path"
 
-	"github.com/FascodeNet/alterlinux/alteriso5/utils"
+	"github.com/Hayao0819/nahi/osutils"
 	cp "github.com/otiai10/copy"
 )
 
@@ -16,7 +16,7 @@ var makeBaseDirs *BuildTask = NewBuildTask("makeBaseDirs",
 			work.target.Out,
 		}
 
-		if err := utils.MkdirsAll(dirs...); err != nil {
+		if err := osutils.MkdirsAll(dirs...); err != nil {
 			return err
 		}
 		return nil

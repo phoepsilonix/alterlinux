@@ -8,6 +8,7 @@ import (
 	"github.com/FascodeNet/alterlinux/alteriso5/config"
 	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	"github.com/FascodeNet/alterlinux/alteriso5/work"
+	"github.com/Hayao0819/nahi/cobrautils"
 	"github.com/spf13/cobra"
 )
 
@@ -25,7 +26,7 @@ func Cmd() *cobra.Command {
 			}, os.Interrupt)
 
 			// Check dependencies
-			if err := utils.CallCmd(cmd, *check.Cmd()); err != nil {
+			if err := cobrautils.CallCmd(cmd, *check.Cmd()); err != nil {
 				return err
 			}
 
