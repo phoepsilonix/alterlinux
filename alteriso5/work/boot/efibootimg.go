@@ -20,7 +20,7 @@ func MakeEfiBootImg(dest string, size int64) error {
 	sizeMib := mibToKiB((byteToKib(size) + 1024) / 1024)
 	slog.Debug("Creating EFI boot image...", "dest", dest, "size", sizeMib)
 
-	mkfs := utils.CommandWithStdio("mkfs.fat", "-C", "-n", "ALTERISO_EFI", dest, fmt.Sprint(sizeMib))
+	mkfs := utils.CommandWithStdio("mkfs.fat", "-C", "-n", "ALTERISOEFI", dest, fmt.Sprint(sizeMib))
 	if err := mkfs.Run(); err != nil {
 		return err
 	}
