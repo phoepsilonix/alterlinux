@@ -6,6 +6,7 @@ import (
 	"path"
 
 	"github.com/FascodeNet/alterlinux/alteriso5/work/boot"
+	"github.com/Hayao0819/nahi/cputils"
 	osutils "github.com/Hayao0819/nahi/futils"
 )
 
@@ -90,13 +91,34 @@ var makeCommonSystemdBootConfig *BuildTask = NewBuildTask("makeCommonSystemdBoot
 	if err := os.MkdirAll(path.Join(workLoaderDir, "entries"), 0755); err != nil {
 		return err
 	}
+	profileEfibootDir := path.Join(w.profile.Base, "efiboot")
 
-	// cpTasks := utils.CopyTask{
+	cpTasks := []cputils.CopyTask{
+		{
+			Source: path.Join(profileEfibootDir, "loader", "loader.conf"),
+			Dest:   path.Join(workLoaderDir, "loader.conf"),
+		},
+		{
+			Source: path.Join(profileEfibootDir, "loader", "entries"),
+			Dest:   path.Join(workLoaderDir, "entries"),
+		},
+	}
 
-	// }
+	if err := cputils.CopyAll(cpTasks...); err != nil {
+		return err
+	}
 
 	return nil
+})
 
+var makeCommonSystemdBootConfigIsofs *BuildTask = NewBuildTask("makeCommonSystemdBootConfigIsofs", func(w Work) error {
+	return nil
+})
+
+var makeCommonSystemdBootConfigEsp *BuildTask = NewBuildTask("makeCommonSystemdBootConfigEsp", func(w Work) error {
+
+	// mcopy -i "${efibootimg}" -s "${work_dir}/loader" ::/
+	return nil
 })
 
 var makeUefiX64SystemdBootEsp *BuildTask = NewBuildTask("makeUefiX64SystemdBootEsp", func(w Work) error {
@@ -113,8 +135,13 @@ var makeUefiX64SystemdBootEsp *BuildTask = NewBuildTask("makeUefiX64SystemdBootE
 	}
 
 	// Copy systemd-boot EFI binary to the default/fallback boot path
+	// mcopy -i "${efibootimg}" \
+	//    "${pacstrap_dir}/usr/lib/systemd/boot/efi/systemd-bootx64.efi" ::/EFI/BOOT/BOOTx64.EFI
 
 	// Copy systemd-boot configuration files
+	if err := w.RunOnce(makeCommonSystemdBootConfigEsp); err != nil {
+		return err
+	}
 
 	// shellx64.efi is picked up automatically when on /
 
@@ -122,5 +149,27 @@ var makeUefiX64SystemdBootEsp *BuildTask = NewBuildTask("makeUefiX64SystemdBootE
 })
 
 var makeUefiX64SystemdBootElTorito *BuildTask = NewBuildTask("makeUefiX64SystemdBootElTorito", func(w Work) error {
+	if err := w.RunOnce(makeCommonSystemdBootConfig); err != nil {
+		return err
+	}
+
+	if err := w.RunOnce(makeUefiX64SystemdBootEsp); err != nil {
+		return err
+	}
+
+	// Additionally set up systemd-boot in ISO 9660. This allows creating a medium for the live environment by using
+    // manual partitioning and simply copying the ISO 9660 file system contents.
+    // This is not related to El Torito booting and no firmware uses these files.
+    // _msg_info "Preparing an /EFI directory for the ISO 9660 file system..."
+    // install -d -m 0755 -- "${isofs_dir}/EFI/BOOT"
+
+    // Copy systemd-boot EFI binary to the default/fallback boot path
+    // install -m 0644 -- "${pacstrap_dir}/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
+    //     "${isofs_dir}/EFI/BOOT/BOOTx64.EFI"
+
+	if err := w.RunOnce(makeCommonSystemdBootConfigIsofs); err != nil {
+		return err
+	}
+
 	return nil
 })
