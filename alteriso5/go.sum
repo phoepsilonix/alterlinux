@@ -1,7 +1,7 @@
 github.com/Hayao0819/go-distro v0.0.0-20240502045834-6a4198612fca h1:o/8EO1u8fmMfdGUedHN+OvZrLb5kafLdVj4hcQtCkf8=
 github.com/Hayao0819/go-distro v0.0.0-20240502045834-6a4198612fca/go.mod h1:C7RUU7FdBZWMNpHLW23ZoaRZnFraq9CEyEPgA6KIuwY=
-github.com/Hayao0819/nahi v0.0.0-20240506173511-aa8a1a06908e h1:izLYnTxEYfQvr0BltY/ploo3eOCMel674yZG0jDDaFM=
-github.com/Hayao0819/nahi v0.0.0-20240506173511-aa8a1a06908e/go.mod h1:6y4OH/3jDW6HX3L2LoaE+GvNlqAzUG0hrpba9U1b2XA=
+github.com/Hayao0819/nahi v0.0.1 h1:Ekm5M0H4KqSkKWUcHwWCeSZooxLRW+385y5M55vYg9I=
+github.com/Hayao0819/nahi v0.0.1/go.mod h1:6y4OH/3jDW6HX3L2LoaE+GvNlqAzUG0hrpba9U1b2XA=
 github.com/ashcrow/osrelease v0.0.0-20180626175927-9b292693c55c h1:icme0QhxrgZOxTBnT6K8dfGLwbKWSOVwPB95XTbo8Ws=
 github.com/ashcrow/osrelease v0.0.0-20180626175927-9b292693c55c/go.mod h1:BRljTyotlu+6N+Qlu5MhjxpdmccCnp9lDvZjNNV8qr4=
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=

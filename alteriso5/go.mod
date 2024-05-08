@@ -4,7 +4,7 @@ go 1.22.2
 
 require (
 	github.com/Hayao0819/go-distro v0.0.0-20240502045834-6a4198612fca
-	github.com/Hayao0819/nahi v0.0.0-20240506173511-aa8a1a06908e
+	github.com/Hayao0819/nahi v0.0.1
 	github.com/m-mizutani/clog v0.0.4
 	github.com/otiai10/copy v1.14.0
 	github.com/spf13/cobra v1.8.0

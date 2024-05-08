@@ -7,7 +7,7 @@ import (
 
 	"github.com/FascodeNet/alterlinux/alteriso5/config"
 	"github.com/FascodeNet/alterlinux/alteriso5/work/airootfs"
-	"github.com/Hayao0819/nahi/osutils"
+	osutils "github.com/Hayao0819/nahi/futils"
 	"github.com/spf13/cobra"
 )
 

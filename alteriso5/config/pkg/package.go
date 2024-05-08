@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/Hayao0819/nahi/osutils"
+	osutils "github.com/Hayao0819/nahi/futils"
 )
 
 // 指定されたプロファイルとアーキテクチャに対応するパッケージリストファイルを検索し、そのファイルのパスを返します。

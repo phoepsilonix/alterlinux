@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"path"
 
-	"github.com/Hayao0819/nahi/osutils"
+	osutils "github.com/Hayao0819/nahi/futils"
 	cp "github.com/otiai10/copy"
 )
 

@@ -6,7 +6,7 @@ import (
 	"path"
 
 	"github.com/FascodeNet/alterlinux/alteriso5/work/boot"
-	"github.com/Hayao0819/nahi/osutils"
+	osutils "github.com/Hayao0819/nahi/futils"
 )
 
 // Prepare configuration files for systemd-boot

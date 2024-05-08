@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/Hayao0819/nahi/fputils"
+	fputils "github.com/Hayao0819/nahi/futils"
 	"github.com/Hayao0819/nahi/tputils"
 )
 
