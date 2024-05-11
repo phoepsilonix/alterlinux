@@ -5,8 +5,10 @@ import (
 	"os"
 	"path"
 
+	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 	"github.com/FascodeNet/alterlinux/alteriso5/work/boot"
 	"github.com/Hayao0819/nahi/cputils"
+	"github.com/Hayao0819/nahi/exutils"
 	osutils "github.com/Hayao0819/nahi/futils"
 )
 
@@ -23,18 +25,18 @@ var makeCommonSystemdBoot *BuildTask = NewBuildTask("makeCommonSystemdBoot", fun
 		// For UEFI x64
 		if w.profile.HasBootMode(boot.UefiX64SystemdBootEsp) || w.profile.HasBootMode(boot.UefiX64SystemdBootElTorito) {
 			efiboot_files = append(efiboot_files,
-				path.Join(w.Dirs.Pacstrap, "usr", "lib", "systemd", "boot", "efi", "systemd-bootx64.efi"),
-				path.Join(w.Dirs.Pacstrap, "usr", "share", "edk2-shell", "x64", "Shell_Full.efi"),
-				path.Join(w.Dirs.Pacstrap, "boot", "memtest86+", "memtest.efi"),
-				path.Join(w.Dirs.Pacstrap, "usr", "share", "licenses", "spdx", "GPL-2.0-only.txt"),
+				utils.Slash(w.Dirs.Pacstrap, "/usr/lib/systemd/boot/efi/systemd-bootx64.efi"),
+				utils.Slash(w.Dirs.Pacstrap, "/usr/share/edk2-shell/x64/Shell_Full.efi"),
+				utils.Slash(w.Dirs.Pacstrap, "/boot/memtest86+/memtest.efi"),
+				utils.Slash(w.Dirs.Pacstrap, "/usr/share/licenses/spdx/GPL-2.0-only.txt"),
 			)
 		}
 
 		// For UEFI ia32
 		if w.profile.HasBootMode(boot.UefiIa32SystemdBootEsp) || w.profile.HasBootMode(boot.UefiIa32SystemdBootElTorito) {
 			efiboot_files = append(efiboot_files,
-				path.Join(w.Dirs.Pacstrap, "usr", "lib", "systemd", "boot", "efi", "systemd-bootia32.efi"),
-				path.Join(w.Dirs.Pacstrap, "usr", "share", "edk2-shell", "ia32", "Shell_Full.efi"),
+				utils.Slash(w.Dirs.Pacstrap, "/usr/lib/systemd/boot/efi/systemd-bootia32.efi"),
+				utils.Slash(w.Dirs.Pacstrap, "/usr/share/edk2-shell/ia32/Shell_Full.efi"),
 			)
 		}
 
@@ -70,10 +72,10 @@ var makeCommonSystemdBoot *BuildTask = NewBuildTask("makeCommonSystemdBoot", fun
 	}
 
 	// For efiboot files
-	if err := os.MkdirAll(path.Join(w.Base, w.target.Arch, "efiboot"), 0755); err != nil {
+	if err := os.MkdirAll(w.Dirs.Efiboot, 0755); err != nil {
 		return err
 	}
-	sizes, err := osutils.GetFileSizesInDir(path.Join(w.Base, w.target.Arch, "efiboot"))
+	sizes, err := osutils.GetFileSizesInDir(w.Dirs.Efiboot)
 	if err != nil {
 		return err
 	}
@@ -118,7 +120,8 @@ var makeCommonSystemdBootConfigIsofs *BuildTask = NewBuildTask("makeCommonSystem
 var makeCommonSystemdBootConfigEsp *BuildTask = NewBuildTask("makeCommonSystemdBootConfigEsp", func(w Work) error {
 
 	// mcopy -i "${efibootimg}" -s "${work_dir}/loader" ::/
-	return nil
+	cmd := exutils.CommandWithStdio("mcopy", "-i", w.Files.EfibootImg, "-s", path.Join(w.Dirs.WorkArch, "loader"), "::/")
+	return cmd.Run()
 })
 
 var makeUefiX64SystemdBootEsp *BuildTask = NewBuildTask("makeUefiX64SystemdBootEsp", func(w Work) error {
@@ -135,8 +138,13 @@ var makeUefiX64SystemdBootEsp *BuildTask = NewBuildTask("makeUefiX64SystemdBootE
 	}
 
 	// Copy systemd-boot EFI binary to the default/fallback boot path
-	// mcopy -i "${efibootimg}" \
-	//    "${pacstrap_dir}/usr/lib/systemd/boot/efi/systemd-bootx64.efi" ::/EFI/BOOT/BOOTx64.EFI
+	{
+		systemdBootEfi := utils.Slash(w.Dirs.Pacstrap, "/usr/lib/systemd/boot/efi/systemd-bootx64.efi")
+		err := exutils.CommandWithStdio("mcopy", "-i", w.Files.EfibootImg, systemdBootEfi, "::/EFI/BOOT/BOOTx64.EFI").Run()
+		if err != nil {
+			return err
+		}
+	}
 
 	// Copy systemd-boot configuration files
 	if err := w.RunOnce(makeCommonSystemdBootConfigEsp); err != nil {
@@ -144,6 +152,13 @@ var makeUefiX64SystemdBootEsp *BuildTask = NewBuildTask("makeUefiX64SystemdBootE
 	}
 
 	// shellx64.efi is picked up automatically when on /
+	{
+		shellEfi := utils.Slash(w.Dirs.Pacstrap, "/usr/share/edk2-shell/x64/Shell_Full.efi")
+		err := exutils.CommandWithStdio("mcopy", "-i", w.Files.EfibootImg, shellEfi, "::/shellx64.efi").Run()
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 })
@@ -158,14 +173,23 @@ var makeUefiX64SystemdBootElTorito *BuildTask = NewBuildTask("makeUefiX64Systemd
 	}
 
 	// Additionally set up systemd-boot in ISO 9660. This allows creating a medium for the live environment by using
-    // manual partitioning and simply copying the ISO 9660 file system contents.
-    // This is not related to El Torito booting and no firmware uses these files.
-    // _msg_info "Preparing an /EFI directory for the ISO 9660 file system..."
-    // install -d -m 0755 -- "${isofs_dir}/EFI/BOOT"
+	// manual partitioning and simply copying the ISO 9660 file system contents.
+	// This is not related to El Torito booting and no firmware uses these files.
+	slog.Info("Preparing an /EFI directory for the ISO 9660 file system...")
+	if err := os.MkdirAll(path.Join(w.Dirs.Iso, "EFI", "BOOT"), 0755); err != nil {
+		return err
+	}
 
-    // Copy systemd-boot EFI binary to the default/fallback boot path
-    // install -m 0644 -- "${pacstrap_dir}/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
-    //     "${isofs_dir}/EFI/BOOT/BOOTx64.EFI"
+	// Copy systemd-boot EFI binary to the default/fallback boot path
+	systemdBootEfi := utils.Slash(w.Dirs.Pacstrap, "/usr/lib/systemd/boot/efi/systemd-bootx64.efi")
+	t := cputils.CopyTask{
+		Source: systemdBootEfi,
+		Dest:   path.Join(w.Dirs.Iso, "EFI", "BOOT", "BOOTx64.EFI"),
+		Perm:   0644,
+	}
+	if err := cputils.CopyAll(t); err != nil {
+		return err
+	}
 
 	if err := w.RunOnce(makeCommonSystemdBootConfigIsofs); err != nil {
 		return err

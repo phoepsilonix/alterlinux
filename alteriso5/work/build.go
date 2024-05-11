@@ -17,6 +17,12 @@ func (work Work) Build(p config.Profile, t config.Target, c *cobra.Command) erro
 	}
 	work.Dirs = dirs
 
+	files, err := work.GetFiles()
+	if err != nil {
+		return err
+	}
+	work.Files = files
+
 	tasks := []*BuildTask{
 		validate,
 		makeBaseDirs,

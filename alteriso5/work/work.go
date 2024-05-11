@@ -17,6 +17,7 @@ type Work struct {
 	target  *config.Target
 	Cmd     *cobra.Command
 	Dirs    *dirs
+	Files   *files
 }
 
 type dirs struct {
@@ -25,6 +26,12 @@ type dirs struct {
 	Work     string
 	Pacstrap string
 	Iso      string
+	WorkArch string
+	Efiboot  string
+}
+
+type files struct {
+	EfibootImg string
 }
 
 type configValues struct {
@@ -33,7 +40,6 @@ type configValues struct {
 }
 
 func New(dir string) *Work {
-
 	w := Work{
 		Base: dir,
 	}
@@ -52,9 +58,19 @@ func (w *Work) GetDirs() (*dirs, error) {
 		Work:     w.Base,
 		Pacstrap: path.Join(w.Base, w.target.Arch, "airootfs"),
 		Iso:      path.Join(w.Base, "iso"),
+		WorkArch: path.Join(w.Base, w.target.Arch),
+		Efiboot:  path.Join(w.Base, w.target.Arch, "efiboot"),
 	}
 
 	return &dv, nil
+}
+
+func (w *Work) GetFiles() (*files, error) {
+	fv := files{
+		EfibootImg: path.Join(w.Dirs.Iso, "efiboot.img"),
+	}
+
+	return &fv, nil
 }
 
 func (w *Work) GetChroot() (*airootfs.Chroot, error) {
