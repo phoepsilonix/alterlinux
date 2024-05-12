@@ -11,10 +11,17 @@ RUN go mod download
 RUN go build -o alteriso5
 
 # 実行ステージ
-# FROM archlinux:base-20240101.0.204074 AS run
+FROM archlinux:base-20240101.0.204074 AS run
 
-# COPY --from=build /alteriso5/alteriso5 /usr/bin/alteriso5
+COPY . .
+COPY --from=build /alteriso5/alteriso5 /usr/bin/alteriso5
 
-# ENTRYPOINT ["/usr/bin/alteriso5"]
+WORKDIR /
 
-# CMD ["build", "./profile"]
+RUN chmod +x ./usr/bin/alteriso5
+
+RUN pacman -Sy --noconfirm
+RUN pacman -S --noconfirm archiso arch-install-scripts
+
+ENTRYPOINT ["/usr/bin/alteriso5"]
+CMD ["build", "./profile"]
