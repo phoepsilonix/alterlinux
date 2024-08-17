@@ -1,4 +1,6 @@
 {
+  "iso_name": "alterlinux",
+  "iso_label": "alterlinux",
   "install_dir": "alter",
   "bootmodes": [
     "bios.syslinux.mbr",
