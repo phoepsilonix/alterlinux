@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/Hayao0819/nahi/exutils"
+	"github.com/FascodeNet/alterlinux/alteriso5/utils"
 )
 
 func byteToKib(b int64) int64 {
@@ -20,12 +20,12 @@ func MakeEfiBootImg(dest string, size int64) error {
 	sizeMib := mibToKiB((byteToKib(size) + 1024) / 1024)
 	slog.Debug("Creating EFI boot image...", "dest", dest, "size", sizeMib)
 
-	mkfs := exutils.CommandWithStdio("mkfs.fat", "-C", "-n", "ALTERISOEFI", dest, fmt.Sprint(sizeMib))
+	mkfs := utils.CommandWithStdio("mkfs.fat", "-C", "-n", "ALTERISOEFI", dest, fmt.Sprint(sizeMib))
 	if err := mkfs.Run(); err != nil {
 		return err
 	}
 
-	mmd := exutils.CommandWithStdio("mmd", "-i", dest, "::/EFI", "::/EFI/BOOT")
+	mmd := utils.CommandWithStdio("mmd", "-i", dest, "::/EFI", "::/EFI/BOOT")
 	if err := mmd.Run(); err != nil {
 		return err
 	}

@@ -20,6 +20,7 @@ type Work struct {
 	Files   *files
 }
 
+// Workで使うディレクトリのパスをまとめた構造体
 type dirs struct {
 	Current  string
 	Data     string
@@ -30,6 +31,7 @@ type dirs struct {
 	Efiboot  string
 }
 
+// Workで使うファイルのパスをまとめた構造体
 type files struct {
 	EfibootImg string
 }
@@ -67,7 +69,7 @@ func (w *Work) GetDirs() (*dirs, error) {
 
 func (w *Work) GetFiles() (*files, error) {
 	fv := files{
-		EfibootImg: path.Join(w.Dirs.Iso, "efiboot.img"),
+		EfibootImg: path.Join(w.Dirs.Work, "efiboot.img"),
 	}
 
 	return &fv, nil

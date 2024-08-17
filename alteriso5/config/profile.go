@@ -18,6 +18,7 @@ type Profile struct {
 	ISOName          string `json:"iso_name"`
 	ISOLabel         string `json:"iso_label"`
 	UseAlterSysLinux bool   `json:"use_alter_syslinux"`
+	UseAlterEfiBoot  bool   `json:"use_alter_efiboot"`
 }
 
 func ReadProfile(dir string) (*Profile, error) {

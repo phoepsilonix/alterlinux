@@ -7,5 +7,6 @@
     "bios.syslinux.eltorito",
     "uefi-x64.systemd-boot.esp"
   ],
-  "use_alter_syslinux": true
+  "use_alter_syslinux": true,
+  "use_alter_efiboot": true
 }
