@@ -38,7 +38,7 @@ func FindPkgListFiles(profile string, arch string) ([]string, error) {
 		}
 		slog.Debug("Found pkglist", "files", files)
 		for _, f := range files {
-			p := path.Join(profile, d, f.Name())
+			p := path.Join(d, f.Name())
 			slog.Info("Found pkglist", "file", p)
 			findFiles = append(findFiles, p)
 		}

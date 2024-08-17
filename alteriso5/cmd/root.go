@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/FascodeNet/alterlinux/alteriso5/log"
 	"github.com/Hayao0819/nahi/cobrautils"
 	"github.com/spf13/cobra"
@@ -18,6 +20,8 @@ func Root() *cobra.Command {
 		}),
 		SilenceUsage: true,
 	}
+
+	root.SetOut(os.Stdout)
 
 	rootSubCmds.Bind(&root)
 
