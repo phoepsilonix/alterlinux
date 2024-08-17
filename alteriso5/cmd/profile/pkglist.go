@@ -26,5 +26,5 @@ func pkgListCmd() *cobra.Command {
 }
 
 func init() {
-	subCmds.RegisterSubCmd(pkgListCmd())
+	subCmds.Add(pkgListCmd())
 }

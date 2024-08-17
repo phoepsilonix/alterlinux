@@ -21,5 +21,5 @@ func convertCmd() *cobra.Command {
 }
 
 func init() {
-	subCmds.RegisterSubCmd(convertCmd())
+	subCmds.Add(convertCmd())
 }

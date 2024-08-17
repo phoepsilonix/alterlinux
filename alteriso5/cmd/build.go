@@ -5,5 +5,5 @@ import (
 )
 
 func init() {
-	rootSubCmds.RegisterSubCmd(build.Cmd())
+	rootSubCmds.Add(build.Cmd())
 }

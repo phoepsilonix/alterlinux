@@ -15,9 +15,9 @@ func OS() error {
 		return ErrUnsupportedOS
 	}
 
-	osdetail := distro.Get()
+	osdetail := distro.GetDetail()
 	if id := osdetail.ID(); id != "arch" {
-		slog.Warn("Unsupported OS: " + id)
+		slog.Warn("Unsupported OS: " + string(id))
 	}
 
 	return nil

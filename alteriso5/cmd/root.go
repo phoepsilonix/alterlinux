@@ -19,7 +19,7 @@ func Root() *cobra.Command {
 		SilenceUsage: true,
 	}
 
-	rootSubCmds.BindSubCmds(&root)
+	rootSubCmds.Bind(&root)
 
 	return &root
 }

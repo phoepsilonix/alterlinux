@@ -25,7 +25,7 @@ func Cmd() *cobra.Command {
 		}),
 	}
 
-	subCmds.BindSubCmds(&cmd)
+	subCmds.Bind(&cmd)
 
 	return &cmd
 }
